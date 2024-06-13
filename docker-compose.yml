@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://212.111.203.173:3307/dekanat
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: SW%4n1v;8S?mBX&8I0jR2A#Ig?1:YU0&
+    networks:
+      - dekanat-network
+
+networks:
+  dekanat-network:
+    driver: bridge
