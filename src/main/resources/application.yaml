@@ -4,10 +4,10 @@ spring:
 
   datasource:
     username: root
-#    password: toor
-#    url: jdbc:mysql://localhost:3306/dekanat
-    password: SW%4n1v;8S?mBX&8I0jR2A#Ig?1:YU0&
-    url: jdbc:mysql://212.111.203.173:3307/dekanat
+    password: toor
+    url: jdbc:mysql://localhost:3306/dekanat
+#    password: SW%4n1v;8S?mBX&8I0jR2A#Ig?1:YU0&
+#    url: jdbc:mysql://212.111.203.173:3307/dekanat
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

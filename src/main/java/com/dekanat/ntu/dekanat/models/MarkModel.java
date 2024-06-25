@@ -1,10 +1,6 @@
 package com.dekanat.ntu.dekanat.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,17 +12,27 @@ import java.sql.Date;
 @Table(name = "mark")
 @AllArgsConstructor
 @NoArgsConstructor
-@Transactional
 @Getter
 @Setter
 public class MarkModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int student;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private StudentModel student;
+
     private int semester;
-    private int discipline;
-    @Column(name = "control")
-    private int control;
+
+    @ManyToOne
+    @JoinColumn(name = "discipline_id")
+    private DisciplineModel discipline;
+
+    @ManyToOne
+    @JoinColumn(name = "control_id")
+    private TypeOfControlModel control;
+
     private int mark;
     private Date date;
     private Integer number;

@@ -9,20 +9,18 @@ import lombok.Setter;
 import java.util.Set;
 
 @Entity
-@Table(name = "department")
+@Table(name = "faculty")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class DepartmentModel {
+public class FacultyModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String title;
-    private String abbreviation;
-    private String title_eng;
+    private String name;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<TrainingPlanModel> trainingPlans;
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<StudentModel> students;
 }

@@ -1,26 +1,25 @@
 package com.dekanat.ntu.dekanat.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.Set;
 
-@Table(name = "student")
 @Entity
+@Table(name = "student")
 @AllArgsConstructor
 @NoArgsConstructor
-@Transactional
 @Getter
 @Setter
 public class StudentModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String name_eng;
     private String surname;
@@ -41,7 +40,6 @@ public class StudentModel {
     private String speciality;
     private String course;
     private String group;
-
     private String enterYear;
     private String number_of_the_credit;
     private String contract_number;
@@ -55,6 +53,13 @@ public class StudentModel {
     private String phone_number;
     private String email;
 
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private FacultyModel faculty;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<TrainingPlanModel> trainingPlans;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<MarkModel> marks;
 }
-

@@ -1,38 +1,46 @@
 package com.dekanat.ntu.dekanat.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "training_plan")
 @Entity
+@Table(name = "training_plan")
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Getter
 @Setter
 public class TrainingPlanModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "student")
-    private int student;
-    @Column(name = "discipline")
-    private int discipline;
-    @Column(name = "semester")
+
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private StudentModel student;
+
+    @ManyToOne
+    @JoinColumn(name = "discipline_id")
+    private DisciplineModel discipline;
+
     private int semester;
-    @Column(name = "credits")
     private int credits;
-    @Column(name = "first_type_control_id")
-    private int first_type_control_id;
-    @Column(name = "second_type_control_id")
-    private int second_type_control_id;
-    @Column(name = "part")
+
+    @ManyToOne
+    @JoinColumn(name = "first_type_control_id")
+    private TypeOfControlModel firstTypeControl;
+
+    @ManyToOne
+    @JoinColumn(name = "second_type_control_id")
+    private TypeOfControlModel secondTypeControl;
+
     private int part;
-    @Column(name = "department_id")
-    private int department_id;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private DepartmentModel department;
+
+    private boolean isCommonDiscipline;
 }
