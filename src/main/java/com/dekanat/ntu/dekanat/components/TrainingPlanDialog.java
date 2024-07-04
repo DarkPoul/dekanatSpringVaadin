@@ -32,11 +32,19 @@ public class TrainingPlanDialog extends Dialog {
     private Button save = new Button("Зберегти");
     private Button cancel = new Button("Відміна");
     private Button remove = new Button("Видалити");
-    private HorizontalLayout horizontalLayout0 = new HorizontalLayout();
-    private HorizontalLayout horizontalLayout1 = new HorizontalLayout();
-    private VerticalLayout verticalLayout0 = new VerticalLayout();
-    private VerticalLayout verticalLayout1 = new VerticalLayout();
-    private VerticalLayout verticalLayout2 = new VerticalLayout();
+
+
+
+
+    private HorizontalLayout HLayoutAll = new HorizontalLayout();
+    private HorizontalLayout HLayoutDisc = new HorizontalLayout();
+    private VerticalLayout VLayoutDisc1 = new VerticalLayout();
+    private VerticalLayout VLayoutDisc2 = new VerticalLayout();
+    private VerticalLayout VLayoutDisc3 = new VerticalLayout();
+    private VerticalLayout VLayoutStudent = new VerticalLayout();
+
+
+
     Checkbox checkAllStudent = new Checkbox();
     CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
     private List<String> students = new ArrayList<>();
@@ -96,13 +104,28 @@ public class TrainingPlanDialog extends Dialog {
         parts.setLabel("Частини");
         depart.setLabel("Кафедра");
 
-        verticalLayout0.add(discipline, hours, choiceDiscipline, firstControl, secondControl, parts, depart);
-        verticalLayout1.add(checkboxGroup, checkAllStudent);
-        verticalLayout1.setHorizontalComponentAlignment(FlexComponent.Alignment.END, checkAllStudent);
-        verticalLayout0.setWidth("200px");
 
-        verticalLayout1.getStyle().set("border", "1px solid #e0e0e0");
-        verticalLayout1.setWidth("250px");
+        VLayoutDisc1.add(discipline, firstControl, choiceDiscipline);
+        VLayoutDisc2.add(hours, secondControl, parts);
+
+        VLayoutStudent.add(checkboxGroup, checkAllStudent);
+        VLayoutStudent.setWidth("400px");
+        VLayoutStudent.setHorizontalComponentAlignment(FlexComponent.Alignment.END, checkAllStudent);
+        VLayoutStudent.getStyle().set("border", "1px solid #e0e0e0");
+
+        HLayoutDisc.add(VLayoutDisc1, VLayoutDisc2);
+        HLayoutDisc.setWidth("600px");
+
+        VLayoutDisc3.add(HLayoutDisc, depart);
+
+        HLayoutAll.add(VLayoutDisc3, VLayoutStudent);
+
+        add(HLayoutAll);
+
+
+
+
+//        verticalLayout1.setWidth("250px");
 
         checkboxGroup.setWidth("100%");
         checkboxGroup.setHeight("95%");
@@ -131,12 +154,7 @@ public class TrainingPlanDialog extends Dialog {
 
         checkboxGroup.setItems(students);
 
-        horizontalLayout0.add(verticalLayout0, verticalLayout1);
-        horizontalLayout1.add(save, cancel, remove);
 
-        verticalLayout2.add(horizontalLayout0);
-
-        add(horizontalLayout0, horizontalLayout1);
     }
 
     public void open(TrainingPlansEntity trainingPlansEntity) {
