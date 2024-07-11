@@ -29,8 +29,8 @@ public class MenuComponent extends VerticalLayout {
         Tabs tabs = new Tabs();
         tabs.add(
                 createTab(VaadinIcon.MENU, "Головна", MainView.class),
-                createTab(VaadinIcon.BOOK, "Навчальні плани", TrainingPlansView.class)
-//                createTab(VaadinIcon.LINE_BAR_CHART, "Успішність", PerformanceView.class),
+                createTab(VaadinIcon.BOOK, "Навчальні плани", TrainingPlansView.class),
+                createTab(VaadinIcon.LINE_BAR_CHART, "Успішність", SuccessView.class)
 //                createTab(VaadinIcon.PENCIL, "Введення оцінок", EnterMarksView.class),
 //                createTab(VaadinIcon.USER_CARD, "Перегляд карток", StudentCardView.class)
 
