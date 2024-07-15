@@ -27,7 +27,7 @@ public class SuccessView extends Div {
     private Select<String> selectGroup = new Select<>();
     private Select<String> selectFirstStudent = new Select<>();
     private Select<String> selectSecondStudent = new Select<>();
-    private Button buttonSynchronization = new Button("Додати");
+    private Button buttonSynchronization = new Button("Перенести");
     private ListBox<String> listStudents = new ListBox<>();
     private Grid<SuccessEntity> marks = new Grid<>(SuccessEntity.class, false);
 
@@ -35,10 +35,10 @@ public class SuccessView extends Div {
         selectGroup.setLabel("Оберіть групу");
         selectGroup.setItems("ІBK4-1", "KN-4-1");
 
-        selectFirstStudent.setLabel("Оберіть студента");
+        selectFirstStudent.setLabel("Перенести з");
         selectFirstStudent.setItems("Пупков");
 
-        selectSecondStudent.setLabel("Оберіть студента");
+        selectSecondStudent.setLabel("Перенести для");
         selectSecondStudent.setItems("Непупков");
 
         listStudents.setItems("Пупков", "Непупков");
@@ -64,7 +64,7 @@ public class SuccessView extends Div {
 
         leftLayout.add(selectGroup, listStudents);
         synchronizationLayout.add(selectFirstStudent, selectSecondStudent, buttonSynchronization);
-        synchronizationLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER); // Center items vertically
+        synchronizationLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END); // Center items vertically
         rightLayout.add(synchronizationLayout, marks);
         mainLayout.add(leftLayout, rightLayout);
         mainLayout.setHeight("100%");

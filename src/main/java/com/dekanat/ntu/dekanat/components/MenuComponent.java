@@ -30,15 +30,14 @@ public class MenuComponent extends VerticalLayout {
         tabs.add(
                 createTab(VaadinIcon.MENU, "Головна", MainView.class),
                 createTab(VaadinIcon.BOOK, "Навчальні плани", TrainingPlansView.class),
-                createTab(VaadinIcon.LINE_BAR_CHART, "Успішність", SuccessView.class)
+                createTab(VaadinIcon.LINE_BAR_CHART, "Успішність", SuccessView.class),
+                createTab(VaadinIcon.ABACUS, "Боржники", DebtorView.class),
 //                createTab(VaadinIcon.PENCIL, "Введення оцінок", EnterMarksView.class),
-//                createTab(VaadinIcon.USER_CARD, "Перегляд карток", StudentCardView.class)
-
+                createTab(VaadinIcon.USER_CARD, "Перегляд інформації", StudentCardView.class)
 //                createTab(VaadinIcon.BOOK, "Навчальні плани"),
 //                createTab(VaadinIcon.LINE_BAR_CHART, "Успішність"),
 //                createTab(VaadinIcon.USER_CARD, "Перегляд карток"),
-//                createTab(VaadinIcon.INFO_CIRCLE_O, "Перегляд інформації"),
-//                createTab(VaadinIcon.ABACUS, "Боржники"),
+
 //                createTab(VaadinIcon.ANGLE_DOUBLE_UP, "Переведення на курс"),
 //                createTab(VaadinIcon.PRINT, "Друк інформації"),
 //                createTab(VaadinIcon.BAR_CHART_H, "Модульний контроль"),
