@@ -13,11 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-@Entity(name = "department")
-public class DepartmentModel {
+@Entity(name = "discipline")
+public class DiscModel {
     @Id
     private long id;
     private String title;
-    private String abbreviation;
     private String eng;
 }

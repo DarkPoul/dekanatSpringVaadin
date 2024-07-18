@@ -1,7 +1,8 @@
 package com.dekanat.ntu.dekanat.views;
 
+import com.dekanat.ntu.dekanat.entity.StudentEntity;
 import com.dekanat.ntu.dekanat.entity.SuccessEntity;
-import com.dekanat.ntu.dekanat.entity.TrainingPlansEntity;
+import com.dekanat.ntu.dekanat.services.StudentService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
@@ -14,6 +15,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @PageTitle("Успішність | Деканат")
 @Route(value = "success", layout = MainView.class)
@@ -31,9 +35,32 @@ public class SuccessView extends Div {
     private ListBox<String> listStudents = new ListBox<>();
     private Grid<SuccessEntity> marks = new Grid<>(SuccessEntity.class, false);
 
-    public SuccessView() {
+    private final StudentService studentService;
+
+    public SuccessView(StudentService studentService) {
+        this.studentService = studentService;
+
+        List<StudentEntity> studentEntities = new ArrayList<>();
+
+
         selectGroup.setLabel("Оберіть групу");
-        selectGroup.setItems("ІBK4-1", "KN-4-1");
+        selectGroup.setItems(studentService.getAllGroups());
+
+
+
+        selectGroup.addValueChangeListener(event -> {
+            studentEntities.clear();
+
+            System.out.println(true);
+
+            studentEntities.addAll(studentService.getStudents(selectGroup.getValue()));
+            List<String> student = new ArrayList<>();
+            for (StudentEntity students: studentEntities){
+                student.add(students.getSurname() + " " + students.getName() + " " + students.getPatronymic());
+            }
+
+            listStudents.setItems(student);
+        });
 
         selectFirstStudent.setLabel("Перенести з");
         selectFirstStudent.setItems("Пупков");

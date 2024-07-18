@@ -1,9 +1,7 @@
 package com.dekanat.ntu.dekanat.components;
 
-import com.dekanat.ntu.dekanat.models.TrainingPlanModel;
 import com.dekanat.ntu.dekanat.views.*;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;

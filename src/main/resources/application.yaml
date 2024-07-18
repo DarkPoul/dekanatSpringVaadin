@@ -4,10 +4,10 @@ spring:
 
   datasource:
     username: root
-#    password: toor
-#    url: jdbc:mysql://localhost:3306/dekanat
-    password: SW%4n1v;8S?mBX&8I0jR2A#Ig?1:YU0&
-    url: jdbc:mysql://212.111.203.173:3307/dekanat
+    password: toor
+    url: jdbc:mysql://localhost:3306/dekanat
+#    password: SW%4n1v;8S?mBX&8I0jR2A#Ig?1:YU0&
+#    url: jdbc:mysql://212.111.203.173:3307/dekanat
 
 
   jpa:
@@ -16,6 +16,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-    #todo коментировать при комите
+
 server:
-  port: 8081
+  #todo коментировать при комите
+  #port: 8081
+  port: 8080
+
