@@ -8,16 +8,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+
+@Entity
+@Table(name = "plans")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
-@Entity(name = "department")
-public class DepartmentModel {
+@Getter
+@Setter
+public class PlansModel {
     @Id
     private long id;
-    private String title;
-    private String abbreviation;
-    private String eng;
+    private String students;
+    private long discipline;
+    private int semester;
+    private int credits;
+    private int first;
+    private int second;
+    private int parts;
+    private int department;
 }

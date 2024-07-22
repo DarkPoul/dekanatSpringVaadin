@@ -1,22 +1,23 @@
 package com.dekanat.ntu.dekanat.models;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "form_control")
+@Table(name = "control")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class FormControlModel {
+public class ControlModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    private Long id;
     private String title;
-    private int type;
+    private String type;
 }
