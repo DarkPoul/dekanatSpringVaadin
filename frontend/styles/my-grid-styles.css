@@ -1,0 +1,4 @@
+/* src/main/resources/META-INF/resources/frontend/styles/my-grid-styles.css */
+vaadin-grid::part(header-cell) {
+  margin-top: 5px; /* Apply margin to header cells */
+}

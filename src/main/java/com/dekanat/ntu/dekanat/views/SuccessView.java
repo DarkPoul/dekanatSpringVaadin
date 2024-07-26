@@ -69,8 +69,12 @@ public class SuccessView extends Div {
         selectSecondStudent.setItems("Непупков");
 
         listStudents.setItems("Пупков", "Непупков");
-        listStudents.getStyle().set("border", "2px solid #cccccc");
-        listStudents.getStyle().set("border-radius", "10px");
+        listStudents.getStyle().set("border", "1px solid #ddd");
+        listStudents.getStyle().set("border-radius", "8px");
+        listStudents.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        listStudents.getStyle().set("padding", "20px");
+        listStudents.getStyle().set("position", "relative");
+        listStudents.getStyle().set("background", "white");
         listStudents.setWidth("100%");
         listStudents.setHeight("90%");
 
@@ -88,6 +92,12 @@ public class SuccessView extends Div {
         SuccessEntity test = new SuccessEntity("Такато", 0, "160", "90", "95", "95", "95", "90", "90", "90");
 
         marks.setItems(test);
+        marks.getStyle().set("border", "1px solid #ddd");
+        marks.getStyle().set("border-radius", "8px");
+        marks.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        marks.getStyle().set("padding", "20px");
+        marks.getStyle().set("position", "relative");
+        marks.getStyle().set("background", "white");
 
         leftLayout.add(selectGroup, listStudents);
         synchronizationLayout.add(selectFirstStudent, selectSecondStudent, buttonSynchronization);

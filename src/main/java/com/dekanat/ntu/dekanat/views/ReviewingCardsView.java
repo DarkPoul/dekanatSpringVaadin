@@ -1,10 +1,12 @@
 package com.dekanat.ntu.dekanat.views;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -16,6 +18,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @PageTitle("Перегляд карток | Деканат")
 @Route(value = "reviewingcards", layout = MainView.class)
@@ -37,7 +41,7 @@ public class ReviewingCardsView extends Div {
     private Button sendToArchiveButton = new Button("Відправити в архів");
     private Button callStudentButton = new Button("Виклик студента");
     private Button notificationButton = new Button("Повідомлення");
-    private Button submitDataButton = new Button("внесення відомості");  // New button
+    private Button submitDataButton = new Button("Внести відомість");  // New button
 
     // Additional Selects and Inputs
     private Select<String> typeOfInformationSelect = new Select<>();
@@ -49,12 +53,12 @@ public class ReviewingCardsView extends Div {
         // Setup selectors
         selectStudent.setLabel("Студент");
         selectStudent.setItems("Олексій Абраменко", "Максим Костюк", "Віталій Крисько"); // Example items
-        selectStudent.setWidth("100%");
+        selectStudent.setWidth("300px");
         selectStudent.getStyle().set("padding", "0");
 
         selectGroup.setLabel("Група");
         selectGroup.setItems("КН-4-1", "ІБК-4-1");
-        selectGroup.setWidth("100%");
+        selectGroup.setWidth("300px");
         selectGroup.getStyle().set("padding", "0");
 
         selectors.add(selectGroup, selectStudent);
@@ -122,7 +126,8 @@ public class ReviewingCardsView extends Div {
         // Setup tabs
         Tab mainInfoTab = new Tab("Основна Інформація");
         Tab additionalInfoTab = new Tab("Додаткова Інформація");
-        tabs.add(mainInfoTab, additionalInfoTab);
+        Tab passportInfoTab = new Tab("Паспортна Інформація");
+        tabs.add(mainInfoTab, passportInfoTab, additionalInfoTab);
 
         // Main info text fields
         TextField lastNameUkrField = new TextField("Прізвище");
@@ -140,20 +145,47 @@ public class ReviewingCardsView extends Div {
         TextField firstNameEngField = new TextField("Ім'я (англ)");
         firstNameEngField.setWidth("24%");
 
-        TextField groupField = new TextField("Група");
-        groupField.setWidth("24%");
+        Select<String> groupSelect = new Select<>();
+        groupSelect.setLabel("Група");
+        groupSelect.setWidth("24%");
+        groupSelect.setItems("Група 1", "Група 2", "Група 3"); // Додайте реальні варіанти
 
-        TextField courseField = new TextField("Курс");
-        courseField.setWidth("24%");
+        Select<String> courseSelect = new Select<>();
+        courseSelect.setLabel("Курс");
+        courseSelect.setWidth("24%");
+        courseSelect.setItems("1", "2", "3", "4", "5"); // Додайте реальні варіанти курсів
 
         TextField groupNumberField = new TextField("Номер групи");
         groupNumberField.setWidth("24%");
+        groupNumberField.setPattern("[1-9]{1,}"); // Дозволяє тільки цифри від 1 до 9
+        groupNumberField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[1-9]+")) {
+                groupNumberField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                groupNumberField.setErrorMessage("Введіть цифру від 1 до 9");
+                Notification.show("Неправильний ввід. Введіть тільки цифри від 1 до 9.");
+            }
+        });
 
-        TextField admissionYearField = new TextField("Рік вступу");
-        admissionYearField.setWidth("24%");
+        Select<String> admissionYearSelect = new Select<>();
+        admissionYearSelect.setLabel("Рік вступу");
+        admissionYearSelect.setWidth("24%");
+        admissionYearSelect.setItems("2020", "2021", "2022", "2023", "2024"); // Додайте реальні варіанти років
+
 
         TextField recordBookNumberField = new TextField("Номер заліковки");
         recordBookNumberField.setWidth("24%");
+        recordBookNumberField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри від 1 до 9
+        recordBookNumberField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[0-9]+")) {
+                recordBookNumberField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                recordBookNumberField.setErrorMessage("Введіть цифри від 0 до 9");
+                Notification.show("Неправильний ввід. Введіть тільки цифри від 0 до 9.");
+            }
+        });
 
         // Add border and title to leftLayout1Page
         Div leftLayoutWrapper = new Div();
@@ -194,7 +226,7 @@ public class ReviewingCardsView extends Div {
         rightLayoutWrapper.add(rightLayoutTitle, rightLayout1Page);
 
         leftLayout1Page.add(lastNameUkrField, firstNameUkrField, middleNameUkrField, lastNameEngField, firstNameEngField);
-        rightLayout1Page.add(groupField, courseField, groupNumberField, admissionYearField, recordBookNumberField);
+        rightLayout1Page.add(groupSelect, courseSelect, groupNumberField, admissionYearSelect, recordBookNumberField);
 
         // Layout for main info text fields
         VerticalLayout mainInfoLayout = new VerticalLayout();
@@ -207,10 +239,53 @@ public class ReviewingCardsView extends Div {
 // Additional info text fields
         TextField caseNumberField = new TextField("Номер справи");
         TextField idCodeField = new TextField("Ідентифікаційний код");
-        TextField birthDateField = new TextField("Дата народження");
-        TextField nationalityField = new TextField("Національність");
-        TextField regionField = new TextField("Область");
+        DatePicker birthDatePicker = new DatePicker("Дата народження");
+        birthDatePicker.setI18n(setLocal());
+        Select<String> nationalityField = new Select<>();
+        nationalityField.setLabel("Національність");
+        nationalityField.setItems("Україна", "Іноземець");
+        Select<String> regionSelect = new Select<>();
+        regionSelect.setLabel("Область");
+        regionSelect.setItems(
+                "Вінницька область",
+                "Волинська область",
+                "Дніпропетровська область",
+                "Донецька область",
+                "Житомирська область",
+                "Закарпатська область",
+                "Запорізька область",
+                "Івано-Франківська область",
+                "Київська область",
+                "Кіровоградська область",
+                "Луганська область",
+                "Львівська область",
+                "Миколаївська область",
+                "Одеська область",
+                "Полтавська область",
+                "Рівненська область",
+                "Сумська область",
+                "Тернопільська область",
+                "Харківська область",
+                "Херсонська область",
+                "Хмельницька область",
+                "Черкаська область",
+                "Чернівецька область",
+                "Чернігівська область",
+                "Автономна Республіка Крим",
+                "м. Київ",
+                "м. Севастополь"
+        );
         TextField indexField = new TextField("Індекс");
+        indexField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри від 0 до 9
+        indexField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[0-9]+")) {
+                indexField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                indexField.setErrorMessage("Введіть цифри від 0 до 9");
+                Notification.show("Неправильний ввід. Введіть тільки цифри від 0 до 9.");
+            }
+        });
         TextField fullAddressField = new TextField("Повна адреса");
         Select<String> benefitsSelect = new Select<>();
         benefitsSelect.setLabel("Пільги");
@@ -221,43 +296,54 @@ public class ReviewingCardsView extends Div {
 
         TextField passportSeriesField = new TextField("Серія паспорту");
         TextField passportNumberField = new TextField("№ паспорту");
-        TextField passportIssueDateField = new TextField("Коли виданий");
+        DatePicker passportIssueDatePicker = new DatePicker("Коли виданий");
+        passportIssueDatePicker.setI18n(setLocal());
         TextField passportIssuedByField = new TextField("Ким виданий");
-        TextField passportExpiryDateField = new TextField("Коли закінчиться дія паспорту");
+        DatePicker passportExpiryDatePicker = new DatePicker("Коли закінчиться дія паспорту");
+        passportExpiryDatePicker.setI18n(setLocal());
         Select<String> educationFormSelect = new Select<>();
         educationFormSelect.setLabel("Форма навчання");
         educationFormSelect.setItems("Денна", "Заочна");
 
-        TextField admissionToUniField = new TextField("Зарахованно до ВУЗу для навчання");
-        TextField degreeField = new TextField("Здобуття звання");
+        Select<String> degreeSelect = new Select<>();
+        degreeSelect.setLabel("Здобуття звання");
+        degreeSelect.setItems(
+                "Бакалавр",
+                "Бакалавр (за скороченим строком)",
+                "Спеціаліст",
+                "Спеціаліст (за скороченим строком)",
+                "Магістр"
+        );
         Select<String> admissionConditionSelect = new Select<>();
         admissionConditionSelect.setLabel("Умови вступу");
-        admissionConditionSelect.setItems("Умова 1", "Умова 2"); // Example items
-        TextField paymentSourceField = new TextField("За кошти (фізичних, юридичних осіб)");
+        admissionConditionSelect.setItems("За конкурсом", "За конкурсом без стажу", "У порядку переведення", "У порядку позаконкурсного набору", "Як відмінника"); // Example items
+        Select<String> paymentSourceSelect = new Select<>();
+        paymentSourceSelect.setLabel("Тип особи");
+        paymentSourceSelect.setItems("Фізичних осіб", "Юридичних осіб", "Держбюджет");
+
         TextField contractNumberField = new TextField("Договір за номером");
+        contractNumberField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри від 0 до 9
+        contractNumberField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[0-9]+")) {
+                contractNumberField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                contractNumberField.setErrorMessage("Введіть цифри від 0 до 9");
+                Notification.show("Неправильний ввід. Введіть тільки цифри від 0 до 9.");
+            }
+        });
         TextField amountField = new TextField("Сума");
+        amountField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри від 0 до 9
+        amountField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[0-9]+")) {
+                amountField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                amountField.setErrorMessage("Введіть цифри від 0 до 9");
+                Notification.show("Неправильний ввід. Введіть тільки цифри від 0 до 9.");
+            }
+        });
 
-// Group 1: Personal Details
-        Div personalDetailsWrapper = new Div();
-        personalDetailsWrapper.getStyle().set("border", "1px solid #ddd");
-        personalDetailsWrapper.getStyle().set("border-radius", "8px");
-        personalDetailsWrapper.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
-        personalDetailsWrapper.getStyle().set("padding", "20px");
-        personalDetailsWrapper.getStyle().set("position", "relative");
-        personalDetailsWrapper.getStyle().set("background", "white");
-
-        Span personalDetailsTitle = new Span("Особисті дані");
-        personalDetailsTitle.getStyle().set("position", "absolute");
-        personalDetailsTitle.getStyle().set("top", "-10px");
-        personalDetailsTitle.getStyle().set("left", "20px");
-        personalDetailsTitle.getStyle().set("background", "white");
-        personalDetailsTitle.getStyle().set("padding", "0 10px");
-        personalDetailsTitle.getStyle().set("font-weight", "bold");
-
-        FormLayout personalDetailsLayout = new FormLayout();
-        personalDetailsLayout.add(caseNumberField, idCodeField, birthDateField, nationalityField, genderSelect);
-
-        personalDetailsWrapper.add(personalDetailsTitle, personalDetailsLayout);
 
 // Group 2: Address Details
         Div addressDetailsWrapper = new Div();
@@ -267,6 +353,7 @@ public class ReviewingCardsView extends Div {
         addressDetailsWrapper.getStyle().set("padding", "20px");
         addressDetailsWrapper.getStyle().set("position", "relative");
         addressDetailsWrapper.getStyle().set("background", "white");
+        addressDetailsWrapper.getStyle().set("width", "97%"); // Set the width to 97%
 
         Span addressDetailsTitle = new Span("Адреса");
         addressDetailsTitle.getStyle().set("position", "absolute");
@@ -277,7 +364,12 @@ public class ReviewingCardsView extends Div {
         addressDetailsTitle.getStyle().set("font-weight", "bold");
 
         FormLayout addressDetailsLayout = new FormLayout();
-        addressDetailsLayout.add(regionField, indexField, fullAddressField, benefitsSelect);
+        addressDetailsLayout.add(regionSelect, indexField, fullAddressField);
+        addressDetailsLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0", 1), // 1 column for narrow layout
+                new FormLayout.ResponsiveStep("500px", 2) // 2 columns for wider layout
+        );
+        addressDetailsLayout.setColspan(fullAddressField, 2);
 
         addressDetailsWrapper.add(addressDetailsTitle, addressDetailsLayout);
 
@@ -299,7 +391,7 @@ public class ReviewingCardsView extends Div {
         passportDetailsTitle.getStyle().set("font-weight", "bold");
 
         FormLayout passportDetailsLayout = new FormLayout();
-        passportDetailsLayout.add(passportSeriesField, passportNumberField, passportIssueDateField, passportIssuedByField, passportExpiryDateField);
+        passportDetailsLayout.add(passportSeriesField, passportNumberField, passportIssueDatePicker, passportExpiryDatePicker, passportIssuedByField,  idCodeField, birthDatePicker, nationalityField, genderSelect);
 
         passportDetailsWrapper.add(passportDetailsTitle, passportDetailsLayout);
 
@@ -311,6 +403,7 @@ public class ReviewingCardsView extends Div {
         educationDetailsWrapper.getStyle().set("padding", "20px");
         educationDetailsWrapper.getStyle().set("position", "relative");
         educationDetailsWrapper.getStyle().set("background", "white");
+        educationDetailsWrapper.getStyle().set("width", "97%"); // Set the width to 97%
 
         Span educationDetailsTitle = new Span("Дані про навчання");
         educationDetailsTitle.getStyle().set("position", "absolute");
@@ -321,15 +414,20 @@ public class ReviewingCardsView extends Div {
         educationDetailsTitle.getStyle().set("font-weight", "bold");
 
         FormLayout educationDetailsLayout = new FormLayout();
-        educationDetailsLayout.add(educationFormSelect, admissionToUniField, degreeField, admissionConditionSelect, paymentSourceField, contractNumberField, amountField);
+        educationDetailsLayout.add(caseNumberField, educationFormSelect, degreeSelect, admissionConditionSelect, paymentSourceSelect, contractNumberField, amountField, benefitsSelect);
 
         educationDetailsWrapper.add(educationDetailsTitle, educationDetailsLayout);
 
 // Layout for additional info text fields
         VerticalLayout additionalInfoLayout = new VerticalLayout();
         additionalInfoLayout.setWidth("100%");
-        additionalInfoLayout.add(personalDetailsWrapper, addressDetailsWrapper, passportDetailsWrapper, educationDetailsWrapper);
+        additionalInfoLayout.add(educationDetailsWrapper, addressDetailsWrapper);
         additionalInfoLayout.getStyle().set("padding", "0px");
+
+        VerticalLayout passportInfoLayout = new VerticalLayout();
+        passportInfoLayout.setWidth("100%");
+        passportInfoLayout.add(passportDetailsWrapper);
+        passportInfoLayout.getStyle().set("padding", "0px");
 
 // Display content for selected tab
         tabs.addSelectedChangeListener(event -> {
@@ -338,6 +436,8 @@ public class ReviewingCardsView extends Div {
                 mainLayout.add(selectors, tabs, mainInfoLayout, buttonsAndControlsLayout);
             } else if (tabs.getSelectedTab().equals(additionalInfoTab)) {
                 mainLayout.add(selectors, tabs, additionalInfoLayout);
+            } else if (tabs.getSelectedTab().equals(passportInfoTab)) {
+                mainLayout.add(selectors, tabs, passportInfoLayout);
             }
         });
 
@@ -347,5 +447,20 @@ public class ReviewingCardsView extends Div {
 
         add(mainLayout);
         setHeight("100%");
+    }
+
+    private DatePicker.DatePickerI18n setLocal() {
+            DatePicker.DatePickerI18n ukrainian = new DatePicker.DatePickerI18n();
+            ukrainian.setMonthNames(List.of("Січень", "Лютий", "Березень", "Квітень",
+                    "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень",
+                    "Листопад", "Грудень"));
+            ukrainian.setWeekdays(List.of("Неділя", "Понеділок", "Вівторок",
+                    "Середа", "Четвер", "П'ятниця", "Субота"));
+            ukrainian.setWeekdaysShort(
+                    List.of("Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"));
+            ukrainian.setToday("Сьогодні");
+            ukrainian.setCancel("Скасувати");
+
+            return ukrainian;
     }
 }

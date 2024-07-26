@@ -1,6 +1,8 @@
 package com.dekanat.ntu.dekanat.views;
 
 import com.dekanat.ntu.dekanat.entity.DebtorEntity;
+import com.dekanat.ntu.dekanat.views.MainView;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,12 +18,15 @@ import com.vaadin.flow.component.html.Span;
 @Route(value = "debtor", layout = MainView.class)
 @Component
 @UIScope
+@CssImport("./styles/my-grid-styles.css") // Import the CSS file
 public class DebtorView extends Div {
     private VerticalLayout mainLayout = new VerticalLayout();
     private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout rightLayout = new VerticalLayout();
     private HorizontalLayout selectors = new HorizontalLayout();
     private HorizontalLayout gridLayout = new HorizontalLayout();
+    private HorizontalLayout countLabels1 = new HorizontalLayout();
+    private HorizontalLayout countLabels2 = new HorizontalLayout();
     private Select<String> selectFaculty = new Select<>();
     private Select<String> selectCourse = new Select<>();
     private Select<String> selectGroup = new Select<>();
@@ -29,7 +34,9 @@ public class DebtorView extends Div {
     private Grid<DebtorEntity> studentGrid = new Grid<>(DebtorEntity.class, false);
     private Grid<String> reasonGrid = new Grid<>();
     private Span totalStudentsLabel = new Span();
+    private Span totalStudentsInt = new Span();
     private Span arrearsCountLabel = new Span();
+    private Span arrearsCountInt = new Span();
 
     public DebtorView() {
         selectFaculty.setLabel("Факультет");
@@ -63,6 +70,11 @@ public class DebtorView extends Div {
                 new DebtorEntity("Юрченя", "Владислав", "Юрійович", 21)
         );
 
+        studentGrid.getStyle().set("border", "1px solid #ddd");
+        studentGrid.getStyle().set("border-radius", "8px");
+        studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        studentGrid.getStyle().set("position", "relative");
+
         reasonGrid.addColumn(String::toString).setHeader("Причини");
         reasonGrid.setItems(
                 "Неявка на екзамен",
@@ -71,14 +83,24 @@ public class DebtorView extends Div {
                 "Інші причини"
         );
 
-        totalStudentsLabel.setText("Кількість студентів які мають заборгованості: 7");
-        arrearsCountLabel.setText("Кількість заборгованостей студента Костюк М.М. [ МП-3-1(21) ]: 0");
+        reasonGrid.getStyle().set("border", "1px solid #ddd");
+        reasonGrid.getStyle().set("border-radius", "8px");
+        reasonGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        reasonGrid.getStyle().set("position", "relative");
+
+        totalStudentsLabel.setText("Кількість студентів які мають заборгованості:");
+        arrearsCountLabel.setText("Кількість заборгованостей студента Костюк М.М. [ МП-3-1(21) ]:");
+        totalStudentsInt.setText("7");
+        arrearsCountInt.setText("8");
 
         selectors.add(selectFaculty, selectCourse, selectGroup, selectGroupNumber);
         selectors.setWidth("100%");
 
-        leftLayout.add(studentGrid, totalStudentsLabel);
-        rightLayout.add(reasonGrid, arrearsCountLabel);
+        countLabels1.add(totalStudentsLabel, totalStudentsInt);
+        countLabels2.add(arrearsCountLabel, arrearsCountInt);
+
+        leftLayout.add(studentGrid, countLabels1);
+        rightLayout.add(reasonGrid, countLabels2);
         gridLayout.add(leftLayout, rightLayout);
         mainLayout.add(selectors, gridLayout);
 
@@ -86,6 +108,8 @@ public class DebtorView extends Div {
         mainLayout.setHeight("100%");
         leftLayout.setHeight("100%");
         leftLayout.setWidth("100%");
+        leftLayout.getStyle().set("padding", "0px");
+        rightLayout.getStyle().set("padding", "0px");
 
         add(mainLayout);
         setHeight("100%");

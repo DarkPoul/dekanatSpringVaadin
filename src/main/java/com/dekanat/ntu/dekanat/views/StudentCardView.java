@@ -29,7 +29,7 @@ public class StudentCardView extends Div {
     public StudentCardView() {
         selectGroup.setLabel("Виберіть групу");
         selectGroup.setItems("ІБК-4-1-20", "ІБК-4-2-20", "ІБК-4-3-20");
-        selectGroup.setWidth("100%");
+        selectGroup.setWidth("250px"); // Set a fixed width
 
         studentGrid.addColumn(StudentCardEntity::getLastName).setHeader("Прізвище").setAutoWidth(true);
         studentGrid.addColumn(StudentCardEntity::getFirstName).setHeader("Ім'я").setAutoWidth(true);
@@ -45,6 +45,14 @@ public class StudentCardView extends Div {
                 new StudentCardEntity("Костяков", "Владислав", "Володимирович", 49223),
                 new StudentCardEntity("Криницький", "Микола", "Георгійович", 40264)
         );
+
+        studentGrid.getStyle().set("border", "1px solid #ddd");
+        studentGrid.getStyle().set("border-radius", "8px");
+        studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        studentGrid.getStyle().set("padding", "20px");
+        studentGrid.getStyle().set("position", "relative");
+        studentGrid.getStyle().set("background", "white");
+        studentGrid.getStyle().set("width", "97%"); // Set the width to 97%
 
         topLayout.add(selectGroup);
         topLayout.setWidth("100%");

@@ -13,7 +13,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 
+
+import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -78,13 +82,15 @@ public class EnterMarksView extends Div {
         leftLayout.add(selectFaculty, selectDepartment, selectSpecialty, selectCourse, selectGroup, selectDiscipline, selectControlType);
         leftLayout.getStyle().set("padding-top", "0px");
         leftLayout.getStyle().set("gap", "5px");
+        leftLayout.getStyle().set("padding-left", "0px");
 
         // Buttons
-        Button saveButton = new Button("Зберегти");
-        Button approveButton = new Button("Затвердити");
-        Button unlockButton = new Button("Розблокувати");
-        Button printReportButton = new Button("Друк відомості");
-        Button additionalReportButton = new Button("Додаткова відомість");
+        Button saveButton = new Button("Зберегти", new Icon(VaadinIcon.CLIPBOARD_CHECK));
+        Button approveButton = new Button("Затвердити", new Icon(VaadinIcon.CHECK_CIRCLE));
+        Button unlockButton = new Button("Розблокувати", new Icon(VaadinIcon.UNLOCK));
+        Button printReportButton = new Button("Друк відомості", new Icon(VaadinIcon.PRINT));
+        Button additionalReportButton = new Button("Додаткова відомість", new Icon(VaadinIcon.FILE_ADD));
+
 
         buttonLayout.add(saveButton, approveButton, unlockButton, printReportButton, additionalReportButton);
 
@@ -108,11 +114,18 @@ public class EnterMarksView extends Div {
         );
         studentGrid.setItems(sampleData);
 
+        studentGrid.getStyle().set("border", "1px solid #ddd");
+        studentGrid.getStyle().set("border-radius", "8px");
+        studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        studentGrid.getStyle().set("position", "relative");
+
         // Align the button layout at the top
         buttonLayout.setWidthFull();
         buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+        buttonLayout.getStyle().set("gap", "5px");
 
         // Add the grid to the right layout
+        rightLayout.getStyle().set("padding-left", "0px");
         rightLayout.add(buttonLayout, studentGrid);
         rightLayout.setWidthFull();
 
