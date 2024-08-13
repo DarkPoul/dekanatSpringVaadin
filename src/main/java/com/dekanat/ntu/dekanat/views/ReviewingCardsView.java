@@ -1,9 +1,14 @@
 package com.dekanat.ntu.dekanat.views;
 
+import com.dekanat.ntu.dekanat.entity.OrderEntity;
+import com.dekanat.ntu.dekanat.entity.SuccessEntity;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -14,11 +19,14 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @PageTitle("Перегляд карток | Деканат")
@@ -34,21 +42,19 @@ public class ReviewingCardsView extends Div {
     private Select<String> selectGroup = new Select<>();
     private Tabs tabs = new Tabs();
 
+    Grid<OrderEntity> orderGrid = new Grid<>(OrderEntity.class, false);
+
     // Buttons
     private Button addCardButton = new Button("Додати картку");
-    private Button previousCardButton = new Button("Попередня картка");
-    private Button nextCardButton = new Button("Наступна картка");
     private Button sendToArchiveButton = new Button("Відправити в архів");
-    private Button callStudentButton = new Button("Виклик студента");
-    private Button notificationButton = new Button("Повідомлення");
-    private Button submitDataButton = new Button("Внести відомість");  // New button
+    private Button editButton = new Button("Редагувати");
+    private Button submitDataButton = new Button("Внести відомість");
 
     // Additional Selects and Inputs
     private Select<String> typeOfInformationSelect = new Select<>();
     private DatePicker datePicker = new DatePicker("Дата");
     private TextField numberField = new TextField("Номер");
     private Select<String> studentOrGroupSelect = new Select<>();
-
     public ReviewingCardsView() {
         // Setup selectors
         selectStudent.setLabel("Студент");
@@ -64,70 +70,64 @@ public class ReviewingCardsView extends Div {
         selectors.add(selectGroup, selectStudent);
         selectors.setWidth("100%");
 
-        // Buttons Layout
-        VerticalLayout buttonLayout = new VerticalLayout();
-
         // Additional Controls Layout
-        VerticalLayout additionalControlsLayout = new VerticalLayout();
+        HorizontalLayout additionalControlsLayout = new HorizontalLayout();
         typeOfInformationSelect.setLabel("Тип відомості");
         typeOfInformationSelect.setItems("Зарахований"); // Example items
         typeOfInformationSelect.getStyle().set("padding", "0");
-        typeOfInformationSelect.setWidth("45%");
+        typeOfInformationSelect.setWidth("25%");
+
         datePicker.getStyle().set("padding", "0");
-        datePicker.setWidth("45%");
+        datePicker.setWidth("25%");
+
+        numberField.getStyle().set("padding", "0");
+        numberField.setWidth("25%");
 
         studentOrGroupSelect.setLabel("Тип");
         studentOrGroupSelect.setItems("Один студент", "Вся група");
         studentOrGroupSelect.setWidth("25%");
         studentOrGroupSelect.getStyle().set("padding", "0");
-        numberField.getStyle().set("padding", "0");
-        numberField.setWidth("25%");
+
         submitDataButton.setWidth("35%");
 
-        HorizontalLayout topRow = new HorizontalLayout();
-        topRow.add(typeOfInformationSelect, datePicker);
-
-        HorizontalLayout bottomRow = new HorizontalLayout();
-        bottomRow.add(numberField, studentOrGroupSelect, submitDataButton);  // Add submitDataButton
-        bottomRow.setWidth("530px");
-
-        additionalControlsLayout.add(topRow, bottomRow);
+        additionalControlsLayout.add(typeOfInformationSelect, datePicker, numberField, studentOrGroupSelect, submitDataButton);
         additionalControlsLayout.setWidth("100%");
         additionalControlsLayout.getStyle().set("padding", "0");
-        additionalControlsLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
 
-        // Combined Layout for Buttons and Controls
-        HorizontalLayout buttonsAndControlsLayout = new HorizontalLayout();
-        buttonsAndControlsLayout.add(buttonLayout, additionalControlsLayout);
-        buttonsAndControlsLayout.setWidth("100%");
-        buttonsAndControlsLayout.setSpacing(true);
-        buttonsAndControlsLayout.getStyle().set("padding", "0");
-        buttonsAndControlsLayout.getStyle().set("align-items", "baseline");
-
-        // Arrange Buttons and Additional Controls in Two Rows
-        VerticalLayout twoRowLayout = new VerticalLayout();
-        HorizontalLayout buttonRow1 = new HorizontalLayout();
-        buttonRow1.add(addCardButton, previousCardButton, nextCardButton);
-
-        HorizontalLayout buttonRow2 = new HorizontalLayout();
-        buttonRow2.add(sendToArchiveButton, callStudentButton, notificationButton);
-
-        VerticalLayout buttonRowsLayout = new VerticalLayout();
-        buttonRowsLayout.add(buttonRow1, buttonRow2);
-        buttonRowsLayout.setWidth("100%");
-        buttonRowsLayout.setSpacing(true);
-        buttonRowsLayout.getStyle().set("padding", "0");
-        buttonLayout.add(buttonRowsLayout);
+        // Button Layout
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.add(selectGroup, selectStudent, addCardButton, sendToArchiveButton, editButton);
         buttonLayout.setWidth("100%");
         buttonLayout.setSpacing(true);
         buttonLayout.getStyle().set("padding", "0");
-        buttonLayout.setAlignItems(FlexComponent.Alignment.START);
+        buttonLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
+
+
+        orderGrid.addColumn(OrderEntity::getOrderNumber).setHeader("№ наказу").setWidth("20%");
+        orderGrid.addColumn(OrderEntity::getStatus).setHeader("Стан").setWidth("40%");
+        orderGrid.addColumn(OrderEntity::getDate).setHeader("Дата").setWidth("40%");
+
+        OrderEntity test = new OrderEntity("12346", "В процесі", LocalDate.now().minusDays(2));
+
+        orderGrid.setItems(test);
+        orderGrid.getStyle().set("border", "1px solid #ddd");
+        orderGrid.getStyle().set("border-radius", "8px");
+        orderGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        orderGrid.getStyle().set("padding", "20px");
+        orderGrid.getStyle().set("position", "relative");
+        orderGrid.getStyle().set("background", "white");
+
+
+// Limit the height to display only 5 rows maximum
+        orderGrid.setPageSize(5);
+
 
         // Setup tabs
         Tab mainInfoTab = new Tab("Основна Інформація");
         Tab additionalInfoTab = new Tab("Додаткова Інформація");
         Tab passportInfoTab = new Tab("Паспортна Інформація");
-        tabs.add(mainInfoTab, passportInfoTab, additionalInfoTab);
+        Tab educationDocumentsTab = new Tab("Документи про освіту");
+        tabs.add(mainInfoTab, passportInfoTab, additionalInfoTab, educationDocumentsTab);
 
         // Main info text fields
         TextField lastNameUkrField = new TextField("Прізвище");
@@ -239,6 +239,17 @@ public class ReviewingCardsView extends Div {
 // Additional info text fields
         TextField caseNumberField = new TextField("Номер справи");
         TextField idCodeField = new TextField("Ідентифікаційний код");
+        idCodeField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри
+        idCodeField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[0-9]+")) {
+                idCodeField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                idCodeField.setErrorMessage("Введіть тільки цифри");
+                Notification.show("Неправильний ввід. Введіть тільки цифри.");
+            }
+        });
+        TextField unzrField = new TextField("УНЗР");
         DatePicker birthDatePicker = new DatePicker("Дата народження");
         birthDatePicker.setI18n(setLocal());
         Select<String> nationalityField = new Select<>();
@@ -276,26 +287,70 @@ public class ReviewingCardsView extends Div {
                 "м. Севастополь"
         );
         TextField indexField = new TextField("Індекс");
-        indexField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри від 0 до 9
+        indexField.setPattern("[0-9]{1,5}"); // Дозволяет только цифры от 0 до 9, максимум 5 цифр
+        indexField.setMaxLength(5); // Ограничение на 5 символов
+
         indexField.addValueChangeListener(event -> {
             String value = event.getValue();
-            if (value.matches("[0-9]+")) {
-                indexField.setErrorMessage(null); // Очистити повідомлення про помилку
+            if (value.matches("[0-9]{1,5}")) {
+                indexField.setErrorMessage(null); // Очистить сообщение об ошибке
             } else {
-                indexField.setErrorMessage("Введіть цифри від 0 до 9");
-                Notification.show("Неправильний ввід. Введіть тільки цифри від 0 до 9.");
+                indexField.setErrorMessage("Індекс повинен містити до 5 цифр");
+                Notification.show("Неправильний ввід. Введіть до 5 цифр.");
             }
         });
         TextField fullAddressField = new TextField("Повна адреса");
-        Select<String> benefitsSelect = new Select<>();
+        MultiSelectComboBox<String> benefitsSelect = new MultiSelectComboBox<>();
         benefitsSelect.setLabel("Пільги");
-        benefitsSelect.setItems("Пільга 1", "Пільга 2"); // Example items
+        benefitsSelect.setItems("Пільга 1", "Пільга 2", "Пільга 3"); // Приклад елементів
+        // Text fields for ЄДЕБО numbers
+        TextField personNumberEDEBOField = new TextField("Номер фіз. особи ЄДЕБО");
+        TextField studentCardNumberEDEBOField = new TextField("Номер картки здобувача ЄДЕБО");
+
+// Set the pattern to allow only digits and enforce a minimum of 7 characters
+        personNumberEDEBOField.setPattern("\\d{7,}");
+        studentCardNumberEDEBOField.setPattern("\\d{7,}");
+
+// Set error messages and add value change listeners to validate input
+        personNumberEDEBOField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("\\d{7,}")) {
+                personNumberEDEBOField.setErrorMessage(null);
+            } else {
+                personNumberEDEBOField.setErrorMessage("Введіть мінімум 7 цифр");
+                Notification.show("Неправильний ввід. Введіть мінімум 7 цифр.");
+            }
+        });
+
+        studentCardNumberEDEBOField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("\\d{7,}")) {
+                studentCardNumberEDEBOField.setErrorMessage(null);
+            } else {
+                studentCardNumberEDEBOField.setErrorMessage("Введіть мінімум 7 цифр");
+                Notification.show("Неправильний ввід. Введіть мінімум 7 цифр.");
+            }
+        });
+
+// Add these fields to the appropriate layout
+        VerticalLayout edeboFieldsLayout = new VerticalLayout();
+        edeboFieldsLayout.add();
         Select<String> genderSelect = new Select<>();
         genderSelect.setLabel("Стать");
         genderSelect.setItems("Чоловіча", "Жіноча");
 
         TextField passportSeriesField = new TextField("Серія паспорту");
         TextField passportNumberField = new TextField("№ паспорту");
+        passportNumberField.setPattern("[0-9]{1,}"); // Дозволяє тільки цифри
+        passportNumberField.addValueChangeListener(event -> {
+            String value = event.getValue();
+            if (value.matches("[0-9]+")) {
+                passportNumberField.setErrorMessage(null); // Очистити повідомлення про помилку
+            } else {
+                passportNumberField.setErrorMessage("Введіть тільки цифри");
+                Notification.show("Неправильний ввід. Введіть тільки цифри.");
+            }
+        });
         DatePicker passportIssueDatePicker = new DatePicker("Коли виданий");
         passportIssueDatePicker.setI18n(setLocal());
         TextField passportIssuedByField = new TextField("Ким виданий");
@@ -391,7 +446,7 @@ public class ReviewingCardsView extends Div {
         passportDetailsTitle.getStyle().set("font-weight", "bold");
 
         FormLayout passportDetailsLayout = new FormLayout();
-        passportDetailsLayout.add(passportSeriesField, passportNumberField, passportIssueDatePicker, passportExpiryDatePicker, passportIssuedByField,  idCodeField, birthDatePicker, nationalityField, genderSelect);
+        passportDetailsLayout.add(passportSeriesField, passportNumberField, passportIssueDatePicker, passportExpiryDatePicker, passportIssuedByField,  idCodeField,unzrField, birthDatePicker, nationalityField, genderSelect,personNumberEDEBOField, studentCardNumberEDEBOField);
 
         passportDetailsWrapper.add(passportDetailsTitle, passportDetailsLayout);
 
@@ -429,19 +484,133 @@ public class ReviewingCardsView extends Div {
         passportInfoLayout.add(passportDetailsWrapper);
         passportInfoLayout.getStyle().set("padding", "0px");
 
-// Display content for selected tab
+// Group 1: General Education Documents
+        Div generalEducationDocumentsWrapper = new Div();
+        generalEducationDocumentsWrapper.getStyle().set("border", "1px solid #ddd");
+        generalEducationDocumentsWrapper.getStyle().set("border-radius", "8px");
+        generalEducationDocumentsWrapper.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        generalEducationDocumentsWrapper.getStyle().set("padding", "20px");
+        generalEducationDocumentsWrapper.getStyle().set("position", "relative");
+        generalEducationDocumentsWrapper.getStyle().set("background", "white");
+        generalEducationDocumentsWrapper.getStyle().set("width", "97%"); // Set the width to 97%
+
+        Span generalEducationDocumentsTitle = new Span("Попередня освіта");
+        generalEducationDocumentsTitle.getStyle().set("position", "absolute");
+        generalEducationDocumentsTitle.getStyle().set("top", "-10px");
+        generalEducationDocumentsTitle.getStyle().set("left", "20px");
+        generalEducationDocumentsTitle.getStyle().set("background", "white");
+        generalEducationDocumentsTitle.getStyle().set("padding", "0 10px");
+        generalEducationDocumentsTitle.getStyle().set("font-weight", "bold");
+
+        TextField documentSeriesField = new TextField("Серія документу");
+        TextField documentNumberField = new TextField("№ документу");
+        DatePicker documentIssueDatePicker = new DatePicker("Дата видачі");
+        TextField institutionNameField = new TextField("Назва навчального закладу");
+        TextField institutionNameEngField = new TextField("Назва навчального закладу (англ)");
+        Checkbox distinctionCheckbox = new Checkbox("З відзнакою");
+
+// Create the dropdown (select) field for document type
+        Select<String> documentTypeSelect = new Select<>();
+        documentTypeSelect.setLabel("Тип документу");
+        documentTypeSelect.setItems("Атестат", "Диплом", "Сертифікат", "Інший");
+        documentTypeSelect.setPlaceholder("Оберіть тип документу");
+
+// Arrange the fields in a FormLayout
+        FormLayout generalEducationDocumentsLayout = new FormLayout();
+
+// Create a horizontal layout for the series, number, and date fields
+        HorizontalLayout seriesNumberDateLayout = new HorizontalLayout();
+        seriesNumberDateLayout.setWidthFull(); // Make the horizontal layout full width
+        seriesNumberDateLayout.setSpacing(true); // Add spacing between the fields
+        seriesNumberDateLayout.add(documentSeriesField, documentNumberField, documentIssueDatePicker);
+        seriesNumberDateLayout.setFlexGrow(1, documentSeriesField, documentNumberField, documentIssueDatePicker); // Make each field take up equal space
+
+// Add components to the FormLayout
+        generalEducationDocumentsLayout.add(
+                documentTypeSelect,
+                distinctionCheckbox,
+                seriesNumberDateLayout,
+                institutionNameField,
+                institutionNameEngField
+        );
+
+// Set responsive steps
+        generalEducationDocumentsLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0", 1), // 1 column for narrow layout
+                new FormLayout.ResponsiveStep("500px", 1) // 2 columns for wider layout
+        );
+
+// Set colspan for distinctionCheckbox to align it properly
+        generalEducationDocumentsLayout.setColspan(distinctionCheckbox, 1);
+
+        generalEducationDocumentsWrapper.add(generalEducationDocumentsTitle, generalEducationDocumentsLayout);
+
+// Group 2: Diploma-Specific Fields
+        Div diplomaDocumentsWrapper = new Div();
+        diplomaDocumentsWrapper.getStyle().set("border", "1px solid #ddd");
+        diplomaDocumentsWrapper.getStyle().set("border-radius", "8px");
+        diplomaDocumentsWrapper.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        diplomaDocumentsWrapper.getStyle().set("padding", "20px");
+        diplomaDocumentsWrapper.getStyle().set("position", "relative");
+        diplomaDocumentsWrapper.getStyle().set("background", "white");
+        diplomaDocumentsWrapper.getStyle().set("width", "97%"); // Set the width to 97%
+
+        Span diplomaSectionTitle = new Span("Диплом");
+        diplomaSectionTitle.getStyle().set("position", "absolute");
+        diplomaSectionTitle.getStyle().set("top", "-10px");
+        diplomaSectionTitle.getStyle().set("left", "20px");
+        diplomaSectionTitle.getStyle().set("background", "white");
+        diplomaSectionTitle.getStyle().set("padding", "0 10px");
+        diplomaSectionTitle.getStyle().set("font-weight", "bold");
+
+// Add new fields for the diploma
+        TextField diplomaSeriesField = new TextField("Серія диплому");
+        TextField diplomaNumberField = new TextField("№ диплому");
+        DatePicker graduationDatePicker = new DatePicker("Дата випуску");
+        TextField appendixNumberField = new TextField("Номер додатку");
+        TextField thesisTitleUkrField = new TextField("Тема дипломної роботи (укр)");
+        TextField thesisTitleEngField = new TextField("Тема дипломної роботи (англ)");
+
+// Create a horizontal layout for the diploma series, number, and graduation date fields
+        HorizontalLayout diplomaLayout = new HorizontalLayout();
+        diplomaLayout.setWidthFull();
+        diplomaLayout.setSpacing(true);
+        diplomaLayout.add(diplomaSeriesField, diplomaNumberField, graduationDatePicker);
+        diplomaLayout.setFlexGrow(1, diplomaSeriesField, diplomaNumberField, graduationDatePicker); // Equal space for fields
+
+// Arrange diploma-specific fields in a FormLayout
+        FormLayout diplomaDocumentsLayout = new FormLayout();
+        diplomaDocumentsLayout.add(
+                diplomaLayout,
+                appendixNumberField,
+                thesisTitleUkrField,
+                thesisTitleEngField
+        );
+
+// Set responsive steps
+        diplomaDocumentsLayout.setResponsiveSteps(
+                new FormLayout.ResponsiveStep("0", 1), // 1 column for narrow layout
+                new FormLayout.ResponsiveStep("500px", 1) // 2 columns for wider layout
+        );
+
+        diplomaDocumentsWrapper.add(diplomaSectionTitle, diplomaDocumentsLayout);
+
+
+        // Update tab selection listener to include the new tab
         tabs.addSelectedChangeListener(event -> {
             mainLayout.removeAll();
             if (tabs.getSelectedTab().equals(mainInfoTab)) {
-                mainLayout.add(selectors, tabs, mainInfoLayout, buttonsAndControlsLayout);
+                mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderGrid);
             } else if (tabs.getSelectedTab().equals(additionalInfoTab)) {
-                mainLayout.add(selectors, tabs, additionalInfoLayout);
+                mainLayout.add(buttonLayout, tabs, additionalInfoLayout);
             } else if (tabs.getSelectedTab().equals(passportInfoTab)) {
-                mainLayout.add(selectors, tabs, passportInfoLayout);
+                mainLayout.add(buttonLayout, tabs, passportInfoLayout);
+            } else if (tabs.getSelectedTab().equals(educationDocumentsTab)) {
+                mainLayout.add(buttonLayout, tabs, generalEducationDocumentsWrapper, diplomaDocumentsWrapper);
             }
         });
 
-        mainLayout.add(selectors, tabs, mainInfoLayout, buttonsAndControlsLayout);
+        mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderGrid);
         mainLayout.setWidth("100%");
         mainLayout.setHeight("100%");
 

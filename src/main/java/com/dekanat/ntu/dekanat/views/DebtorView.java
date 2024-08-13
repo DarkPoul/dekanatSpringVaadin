@@ -8,110 +8,87 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.textfield.TextField;
 import org.springframework.stereotype.Component;
-import com.vaadin.flow.component.html.Span;
+
+import java.util.Arrays;
 
 @PageTitle("Боржники | Деканат")
 @Route(value = "debtor", layout = MainView.class)
 @Component
 @UIScope
-@CssImport("./styles/my-grid-styles.css") // Import the CSS file
+@CssImport("./styles/my-grid-styles.css")
 public class DebtorView extends Div {
     private VerticalLayout mainLayout = new VerticalLayout();
-    private VerticalLayout leftLayout = new VerticalLayout();
-    private VerticalLayout rightLayout = new VerticalLayout();
     private HorizontalLayout selectors = new HorizontalLayout();
-    private HorizontalLayout gridLayout = new HorizontalLayout();
-    private HorizontalLayout countLabels1 = new HorizontalLayout();
-    private HorizontalLayout countLabels2 = new HorizontalLayout();
-    private Select<String> selectFaculty = new Select<>();
-    private Select<String> selectCourse = new Select<>();
+    private VerticalLayout studentColumn = new VerticalLayout();
+    private VerticalLayout disciplineColumn = new VerticalLayout();
     private Select<String> selectGroup = new Select<>();
-    private Select<String> selectGroupNumber = new Select<>();
+    private TextField orderField = new TextField();
+    private DatePicker dateField = new DatePicker();
+    private Button transferButton = new Button("Переведення");
     private Grid<DebtorEntity> studentGrid = new Grid<>(DebtorEntity.class, false);
-    private Grid<String> reasonGrid = new Grid<>();
-    private Span totalStudentsLabel = new Span();
-    private Span totalStudentsInt = new Span();
-    private Span arrearsCountLabel = new Span();
-    private Span arrearsCountInt = new Span();
+    private Grid<String> disciplineGrid = new Grid<>();
 
     public DebtorView() {
-        selectFaculty.setLabel("Факультет");
-        selectFaculty.setItems("Транспортних та інформаційних технологій", "Інші факультети");
-        selectFaculty.setWidth("100%");
-
-        selectCourse.setLabel("Курс");
-        selectCourse.setItems("1", "2", "3", "4", "Всі");
-        selectCourse.setWidth("100%");
-
+        // Настройка селекторов
         selectGroup.setLabel("Група");
         selectGroup.setItems("МП", "Інші групи");
-        selectGroup.setWidth("100%");
+        selectGroup.getStyle().set("width", "350px");
 
-        selectGroupNumber.setLabel("Номер групи");
-        selectGroupNumber.setItems("Всі", "1", "2", "3", "4");
-        selectGroupNumber.setWidth("100%");
+        orderField.setLabel("Наказ");
 
-        studentGrid.addColumn(DebtorEntity::getLastName).setHeader("Прізвище").setAutoWidth(true);
-        studentGrid.addColumn(DebtorEntity::getFirstName).setHeader("Ім'я").setAutoWidth(true);
-        studentGrid.addColumn(DebtorEntity::getPatronymic).setHeader("По батькові").setAutoWidth(true);
-        studentGrid.addColumn(DebtorEntity::getCourseYear).setHeader("Рік Курсу").setAutoWidth(true);
+        dateField.setLabel("Дата");
 
-        studentGrid.setItems(
-                new DebtorEntity("Абраменко", "Олексій", "Романович", 21),
-                new DebtorEntity("Костюк", "Максим", "Миколайович", 21),
-                new DebtorEntity("Крисько", "Віталій", "Андрійович", 21),
-                new DebtorEntity("Лемзяков", "Олександр", "Віталійович", 21),
-                new DebtorEntity("Тріц", "Дмитро", "Вікторович", 21),
-                new DebtorEntity("Тушенко", "Нікіта", "Миколайович", 21),
-                new DebtorEntity("Юрченя", "Владислав", "Юрійович", 21)
-        );
+        // Центрирование кнопки
+        transferButton.getStyle().set("margin", "35px auto 0px");
+        selectors.add(selectGroup, orderField, dateField, transferButton);
+        selectors.setWidth("100%");
+        selectors.setSpacing(true);
+
+        // Настройка таблицы студентов
+        studentGrid.addColumn(DebtorEntity::getLastName).setHeader("Студент").setWidth("250px");
+        studentGrid.addColumn(DebtorEntity::getCourseYear).setHeader("Готовий").setWidth("95px");
 
         studentGrid.getStyle().set("border", "1px solid #ddd");
         studentGrid.getStyle().set("border-radius", "8px");
         studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
         studentGrid.getStyle().set("position", "relative");
+        studentGrid.getStyle().set("width", "350px");
 
-        reasonGrid.addColumn(String::toString).setHeader("Причини");
-        reasonGrid.setItems(
-                "Неявка на екзамен",
-                "Неуспішна здача сесії",
-                "Проблеми з академічною доброчесністю",
-                "Інші причини"
+        // Добавление данных в таблицу студентов
+        studentGrid.setItems(
+                new DebtorEntity("Іванов", 1),
+                new DebtorEntity("Петров", 0),
+                new DebtorEntity("Сидоров", 1)
         );
 
-        reasonGrid.getStyle().set("border", "1px solid #ddd");
-        reasonGrid.getStyle().set("border-radius", "8px");
-        reasonGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
-        reasonGrid.getStyle().set("position", "relative");
+        // Добавляем таблицу студентов в левую колонку
+        studentColumn.add(studentGrid);
+        studentColumn.getStyle().set("padding", "0px");
 
-        totalStudentsLabel.setText("Кількість студентів які мають заборгованості:");
-        arrearsCountLabel.setText("Кількість заборгованостей студента Костюк М.М. [ МП-3-1(21) ]:");
-        totalStudentsInt.setText("7");
-        arrearsCountInt.setText("8");
+        // Настройка таблицы дисциплин
+        disciplineGrid.addColumn(String::toString).setHeader("Дисципліна").setAutoWidth(true);
+        disciplineGrid.addColumn(String::toString).setHeader("Причини").setAutoWidth(true);
 
-        selectors.add(selectFaculty, selectCourse, selectGroup, selectGroupNumber);
-        selectors.setWidth("100%");
+        disciplineGrid.getStyle().set("border", "1px solid #ddd");
+        disciplineGrid.getStyle().set("border-radius", "8px");
+        disciplineGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        disciplineGrid.getStyle().set("position", "relative");
+        disciplineGrid.getStyle().set("width", "600px");
 
-        countLabels1.add(totalStudentsLabel, totalStudentsInt);
-        countLabels2.add(arrearsCountLabel, arrearsCountInt);
+        // Добавляем таблицу дисциплин в правую колонку
+        disciplineColumn.add(disciplineGrid);
+        disciplineColumn.getStyle().set("padding", "0px");
 
-        leftLayout.add(studentGrid, countLabels1);
-        rightLayout.add(reasonGrid, countLabels2);
-        gridLayout.add(leftLayout, rightLayout);
-        mainLayout.add(selectors, gridLayout);
-
-        gridLayout.setWidth("100%");
-        mainLayout.setHeight("100%");
-        leftLayout.setHeight("100%");
-        leftLayout.setWidth("100%");
-        leftLayout.getStyle().set("padding", "0px");
-        rightLayout.getStyle().set("padding", "0px");
-
+        // Добавляем элементы на основную страницу
+        mainLayout.add(selectors, new HorizontalLayout(studentColumn, disciplineColumn));
         add(mainLayout);
-        setHeight("100%");
     }
 }

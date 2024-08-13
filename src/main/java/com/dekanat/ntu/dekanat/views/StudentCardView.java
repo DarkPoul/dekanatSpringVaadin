@@ -25,6 +25,8 @@ public class StudentCardView extends Div {
     private Select<String> selectGroup = new Select<>();
     private Grid<StudentCardEntity> studentGrid = new Grid<>(StudentCardEntity.class, false);
     private Button evaluateAppButton = new Button("Оцінка додатку");
+    private Button callStudentButton = new Button("Виклик студента");
+    private Button notificationButton = new Button("Повідомлення");
 
     public StudentCardView() {
         selectGroup.setLabel("Виберіть групу");
@@ -57,7 +59,7 @@ public class StudentCardView extends Div {
         topLayout.add(selectGroup);
         topLayout.setWidth("100%");
         leftLayout.add(studentGrid);
-        rightLayout.add(evaluateAppButton);
+        rightLayout.add(evaluateAppButton, callStudentButton, notificationButton); // Add the new buttons here
         mainLayout.add(topLayout, Layout );
         Layout.add(leftLayout, rightLayout);
 

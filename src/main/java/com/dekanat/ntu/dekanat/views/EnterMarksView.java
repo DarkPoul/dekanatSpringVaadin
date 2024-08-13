@@ -110,6 +110,16 @@ public class EnterMarksView extends Div {
         List<EnterMarksEntity> sampleData = Arrays.asList(
                 new EnterMarksEntity(1, "Іваненко Іван Іванович", 10, 9, 8, 7, 34, false, "17.08.2020", "user1"),
                 new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
+                new EnterMarksEntity(2, "Петренко Петро Петрович", 9, 8, 7, 6, 30, true, "18.08.2020", "user2"),
                 new EnterMarksEntity(3, "Сидоренко Сидір Сидорович", 8, 7, 6, 5, 26, false, "20.08.2020", "user3")
         );
         studentGrid.setItems(sampleData);
@@ -118,6 +128,11 @@ public class EnterMarksView extends Div {
         studentGrid.getStyle().set("border-radius", "8px");
         studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
         studentGrid.getStyle().set("position", "relative");
+        studentGrid.getStyle().set("height", "calc(100vh - 200px)");
+
+// The rest of your code remains unchanged
+
+
 
         // Align the button layout at the top
         buttonLayout.setWidthFull();
@@ -140,6 +155,8 @@ public class EnterMarksView extends Div {
 
         mainLayout.add(topLayout, contentLayout);
         mainLayout.setSizeFull();
+        mainLayout.getStyle().set("padding-top", "0px");
+
         add(mainLayout);
     }
 }

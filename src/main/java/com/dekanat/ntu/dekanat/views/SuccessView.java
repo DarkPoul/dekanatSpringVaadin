@@ -32,6 +32,8 @@ public class SuccessView extends Div {
     private Select<String> selectFirstStudent = new Select<>();
     private Select<String> selectSecondStudent = new Select<>();
     private Button buttonSynchronization = new Button("Перенести");
+    private Button buttonEditHours = new Button("Редагувати години");
+    private Button buttonEditDiscipline = new Button("Редагувати дисципліни");
     private ListBox<String> listStudents = new ListBox<>();
     private Grid<SuccessEntity> marks = new Grid<>(SuccessEntity.class, false);
 
@@ -42,16 +44,11 @@ public class SuccessView extends Div {
 
         List<StudentEntity> studentEntities = new ArrayList<>();
 
-
         selectGroup.setLabel("Оберіть групу");
         selectGroup.setItems(studentService.getAllGroups());
 
-
-
         selectGroup.addValueChangeListener(event -> {
             studentEntities.clear();
-
-            System.out.println(true);
 
             studentEntities.addAll(studentService.getStudents(selectGroup.getValue()));
             List<String> student = new ArrayList<>();
@@ -100,8 +97,8 @@ public class SuccessView extends Div {
         marks.getStyle().set("background", "white");
 
         leftLayout.add(selectGroup, listStudents);
-        synchronizationLayout.add(selectFirstStudent, selectSecondStudent, buttonSynchronization);
-        synchronizationLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END); // Center items vertically
+        synchronizationLayout.add(selectFirstStudent, selectSecondStudent, buttonSynchronization, buttonEditHours, buttonEditDiscipline);
+        synchronizationLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END); // Вирівнювання елементів вертикально
         rightLayout.add(synchronizationLayout, marks);
         mainLayout.add(leftLayout, rightLayout);
         mainLayout.setHeight("100%");
