@@ -4,6 +4,7 @@ import com.dekanat.ntu.dekanat.entity.StudentCardEntity;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -23,16 +24,34 @@ public class StudentCardView extends Div {
     private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout rightLayout = new VerticalLayout();
     private Select<String> selectGroup = new Select<>();
+    private Select<String> selectSemester = new Select<>(); // Semester selection
+    private Select<String> selectControl = new Select<>(); // Control type selection
     private Grid<StudentCardEntity> studentGrid = new Grid<>(StudentCardEntity.class, false);
     private Button evaluateAppButton = new Button("Оцінка додатку");
     private Button callStudentButton = new Button("Виклик студента");
     private Button notificationButton = new Button("Повідомлення");
 
+    // New buttons for table actions
+    private Button generalTableButton = new Button("Загальна таблиця");
+    private Button summarizedTableButton = new Button("Зведена таблиця");
+    private Button missingDataButton = new Button("Не введені дані");
+    private Button unsatisfactoryResultsButton = new Button("Студенти з низькими результатами");
+
     public StudentCardView() {
         selectGroup.setLabel("Виберіть групу");
         selectGroup.setItems("ІБК-4-1-20", "ІБК-4-2-20", "ІБК-4-3-20");
-        selectGroup.setWidth("250px"); // Set a fixed width
 
+        // Semester selection
+        selectSemester.setLabel("Cеместр для створення звіту");
+        selectSemester.setItems("1", "2");
+        selectSemester.setWidth("250px");
+
+        // Control type selection
+        selectControl.setLabel("Вибір контролю");
+        selectControl.setItems("Перший модульний контроль", "Другий модульний контроль");
+        selectControl.setWidth("250px");
+
+        // Configure the grid
         studentGrid.addColumn(StudentCardEntity::getLastName).setHeader("Прізвище").setAutoWidth(true);
         studentGrid.addColumn(StudentCardEntity::getFirstName).setHeader("Ім'я").setAutoWidth(true);
         studentGrid.addColumn(StudentCardEntity::getPatronymic).setHeader("По батькові").setAutoWidth(true);
@@ -48,20 +67,55 @@ public class StudentCardView extends Div {
                 new StudentCardEntity("Криницький", "Микола", "Георгійович", 40264)
         );
 
+        // Apply custom styling to the grid
         studentGrid.getStyle().set("border", "1px solid #ddd");
         studentGrid.getStyle().set("border-radius", "8px");
         studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
         studentGrid.getStyle().set("padding", "20px");
-        studentGrid.getStyle().set("position", "relative");
         studentGrid.getStyle().set("background", "white");
-        studentGrid.getStyle().set("width", "97%"); // Set the width to 97%
+        studentGrid.getStyle().set("width", "97%");
 
-        topLayout.add(selectGroup);
-        topLayout.setWidth("100%");
-        leftLayout.add(studentGrid);
-        rightLayout.add(evaluateAppButton, callStudentButton, notificationButton); // Add the new buttons here
-        mainLayout.add(topLayout, Layout );
+        // Adjust margin in the table using JS
+        studentGrid.getElement().executeJs(
+                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px';"
+        );
+
+
+// Add select and buttons to a single layout (topLayout)
+        topLayout.add(selectGroup, evaluateAppButton, callStudentButton, notificationButton);
+        topLayout.setSpacing(true);
+        topLayout.setAlignItems(FlexComponent.Alignment.BASELINE); // Align items properly
+        topLayout.setWidth("95%");
+        topLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN); // Evenly space components
+        evaluateAppButton.getStyle().set("flex-grow", "1");
+        callStudentButton.getStyle().set("flex-grow", "1");
+        notificationButton.getStyle().set("flex-grow", "1");
+
+
+
+        // Create a new VerticalLayout for semester and control selection, and action buttons
+        VerticalLayout controlsLayout = new VerticalLayout();
+        controlsLayout.add(selectSemester, selectControl, generalTableButton, summarizedTableButton, missingDataButton, unsatisfactoryResultsButton);
+        controlsLayout.setSpacing(true);
+        controlsLayout.setWidth("250px"); // Set a fixed width for control layout
+        controlsLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        // Add controlsLayout to rightLayout
+        rightLayout.add(controlsLayout);
+        rightLayout.setWidth("250px"); // Adjust as necessary
+        rightLayout.getStyle().set("padding", "0px");
+        rightLayout.getStyle().set("padding-top", "50px");
+        rightLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+
+        // Add grid and right layout (empty in this case) to the main layout
+        leftLayout.add(topLayout, studentGrid);
+        leftLayout.getStyle().set("padding", "0px");
+
+        // Ensure the layout widths match the grid's width
+        mainLayout.add(Layout);
         Layout.add(leftLayout, rightLayout);
+        Layout.getStyle().set("gap", "0px");
 
         mainLayout.setWidth("100%");
         Layout.setWidth("100%");

@@ -40,7 +40,7 @@ public class DebtorView extends Div {
         // Настройка селекторов
         selectGroup.setLabel("Група");
         selectGroup.setItems("МП", "Інші групи");
-        selectGroup.getStyle().set("width", "350px");
+        selectGroup.getStyle().set("width", "37%");
 
         orderField.setLabel("Наказ");
 
@@ -52,15 +52,21 @@ public class DebtorView extends Div {
         selectors.setWidth("100%");
         selectors.setSpacing(true);
 
-        // Настройка таблицы студентов
-        studentGrid.addColumn(DebtorEntity::getLastName).setHeader("Студент").setWidth("250px");
-        studentGrid.addColumn(DebtorEntity::getCourseYear).setHeader("Готовий").setWidth("95px");
+
+        studentGrid.addColumn(DebtorEntity::getLastName).setHeader("Студент").setAutoWidth(true);
+        studentGrid.addColumn(DebtorEntity::getCourseYear).setHeader("Готовий").setWidth("90px").setFlexGrow(0);;
+
 
         studentGrid.getStyle().set("border", "1px solid #ddd");
         studentGrid.getStyle().set("border-radius", "8px");
         studentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
         studentGrid.getStyle().set("position", "relative");
-        studentGrid.getStyle().set("width", "350px");
+        studentGrid.getStyle().set("width", "100%");
+
+        studentGrid.getElement().executeJs(
+                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+        );
 
         // Добавление данных в таблицу студентов
         studentGrid.setItems(
@@ -72,6 +78,7 @@ public class DebtorView extends Div {
         // Добавляем таблицу студентов в левую колонку
         studentColumn.add(studentGrid);
         studentColumn.getStyle().set("padding", "0px");
+        studentColumn.setWidth("37%"); // Ширина колонки с таблицей студентов
 
         // Настройка таблицы дисциплин
         disciplineGrid.addColumn(String::toString).setHeader("Дисципліна").setAutoWidth(true);
@@ -81,14 +88,25 @@ public class DebtorView extends Div {
         disciplineGrid.getStyle().set("border-radius", "8px");
         disciplineGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
         disciplineGrid.getStyle().set("position", "relative");
-        disciplineGrid.getStyle().set("width", "600px");
+        disciplineGrid.getStyle().set("width", "100%");
+
+        disciplineGrid.getElement().executeJs(
+                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+        );
 
         // Добавляем таблицу дисциплин в правую колонку
         disciplineColumn.add(disciplineGrid);
         disciplineColumn.getStyle().set("padding", "0px");
+        disciplineColumn.setWidth("60%"); // Ширина колонки с таблицей дисциплин
 
         // Добавляем элементы на основную страницу
-        mainLayout.add(selectors, new HorizontalLayout(studentColumn, disciplineColumn));
+        HorizontalLayout contentLayout = new HorizontalLayout(studentColumn, disciplineColumn);
+        contentLayout.setWidth("100%");
+        contentLayout.setHeight("600px"); // Установите необходимую высоту
+
+        mainLayout.add(selectors, contentLayout);
+        mainLayout.setSizeFull();
         add(mainLayout);
     }
 }

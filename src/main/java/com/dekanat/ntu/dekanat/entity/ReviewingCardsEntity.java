@@ -16,8 +16,25 @@ public class ReviewingCardsEntity {
     private String lastNameEngField;
     private String firstNameEngField;
     private String groupField;
-    private String courseField;
+    private int  courseField;
     private String groupNumberField;
-    private String admissionYearField;
+    private int  admissionYearField;
     private String recordBookNumberField;
+    private String birthDate;
+    private String gender;
+
+    public ReviewingCardsEntity(String lastNameUkrField, String firstNameUkrField, String middleNameUkrField,
+                                String groupField, int courseField, String groupNumberField,
+                                int admissionYearField, String birthDate, String gender) {
+        this.lastNameUkrField = lastNameUkrField;
+        this.firstNameUkrField = firstNameUkrField;
+        this.middleNameUkrField = middleNameUkrField;
+        this.groupField = groupField;
+        this.courseField = courseField;
+        this.groupNumberField = groupNumberField;
+        this.admissionYearField = admissionYearField;
+        this.birthDate = birthDate;
+        this.gender = gender;
+    }
 }
+

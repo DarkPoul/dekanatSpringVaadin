@@ -73,25 +73,38 @@ public class ReviewingCardsView extends Div {
         // Additional Controls Layout
         HorizontalLayout additionalControlsLayout = new HorizontalLayout();
         typeOfInformationSelect.setLabel("Тип відомості");
-        typeOfInformationSelect.setItems("Зарахований"); // Example items
+        typeOfInformationSelect.setItems(
+                "Зарахований",
+                "Відрахований",
+                "Академвідпустка",
+                "Поновлений",
+                "Переведений на наступний курс",
+                "Такий що закінчив навчання"
+        );
+
         typeOfInformationSelect.getStyle().set("padding", "0");
-        typeOfInformationSelect.setWidth("25%");
+        typeOfInformationSelect.setWidth("18%");
 
         datePicker.getStyle().set("padding", "0");
-        datePicker.setWidth("25%");
+        datePicker.setWidth("18%");
+        datePicker.setI18n(setLocal());
 
         numberField.getStyle().set("padding", "0");
-        numberField.setWidth("25%");
+        numberField.setWidth("18%");
 
         studentOrGroupSelect.setLabel("Тип");
         studentOrGroupSelect.setItems("Один студент", "Вся група");
-        studentOrGroupSelect.setWidth("25%");
+        studentOrGroupSelect.setWidth("18%");
         studentOrGroupSelect.getStyle().set("padding", "0");
 
-        submitDataButton.setWidth("35%");
+        submitDataButton.setWidth("18%");
+        submitDataButton.getStyle().set("padding", "0");
+
 
         additionalControlsLayout.add(typeOfInformationSelect, datePicker, numberField, studentOrGroupSelect, submitDataButton);
-        additionalControlsLayout.setWidth("100%");
+        additionalControlsLayout.setAlignSelf(FlexComponent.Alignment.END, submitDataButton);
+        additionalControlsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); // Центрирование по ширине
+        additionalControlsLayout.setWidth("calc(100% - 40px)");
         additionalControlsLayout.getStyle().set("padding", "0");
 
         // Button Layout
@@ -108,18 +121,22 @@ public class ReviewingCardsView extends Div {
         orderGrid.addColumn(OrderEntity::getDate).setHeader("Дата").setWidth("40%");
 
         OrderEntity test = new OrderEntity("12346", "В процесі", LocalDate.now().minusDays(2));
+        OrderEntity test1 = new OrderEntity("12346", "В процесі", LocalDate.now().minusDays(2));
+        OrderEntity test2 = new OrderEntity("12346", "В процесі", LocalDate.now().minusDays(2));
+        OrderEntity test3 = new OrderEntity("12346", "В процесі", LocalDate.now().minusDays(2));
 
-        orderGrid.setItems(test);
+        orderGrid.setItems(test,test1,test2,test3);
         orderGrid.getStyle().set("border", "1px solid #ddd");
         orderGrid.getStyle().set("border-radius", "8px");
         orderGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
         orderGrid.getStyle().set("padding", "20px");
         orderGrid.getStyle().set("position", "relative");
         orderGrid.getStyle().set("background", "white");
-
-
-// Limit the height to display only 5 rows maximum
-        orderGrid.setPageSize(5);
+        orderGrid.getStyle().set("min-height", "230px");
+        orderGrid.getElement().executeJs(
+                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+        );
 
 
         // Setup tabs
@@ -505,6 +522,7 @@ public class ReviewingCardsView extends Div {
         TextField documentSeriesField = new TextField("Серія документу");
         TextField documentNumberField = new TextField("№ документу");
         DatePicker documentIssueDatePicker = new DatePicker("Дата видачі");
+        documentIssueDatePicker.setI18n(setLocal());
         TextField institutionNameField = new TextField("Назва навчального закладу");
         TextField institutionNameEngField = new TextField("Назва навчального закладу (англ)");
         Checkbox distinctionCheckbox = new Checkbox("З відзнакою");
@@ -567,6 +585,7 @@ public class ReviewingCardsView extends Div {
         TextField diplomaSeriesField = new TextField("Серія диплому");
         TextField diplomaNumberField = new TextField("№ диплому");
         DatePicker graduationDatePicker = new DatePicker("Дата випуску");
+        graduationDatePicker.setI18n(setLocal());
         TextField appendixNumberField = new TextField("Номер додатку");
         TextField thesisTitleUkrField = new TextField("Тема дипломної роботи (укр)");
         TextField thesisTitleEngField = new TextField("Тема дипломної роботи (англ)");
@@ -613,6 +632,7 @@ public class ReviewingCardsView extends Div {
         mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderGrid);
         mainLayout.setWidth("100%");
         mainLayout.setHeight("100%");
+        mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);
 
         add(mainLayout);
         setHeight("100%");
