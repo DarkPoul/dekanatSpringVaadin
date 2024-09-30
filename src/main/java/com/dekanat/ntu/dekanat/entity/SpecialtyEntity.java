@@ -10,7 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SpecialtyEntity {
+    private int code;
     private String shortName;
     private String name;
-    private int code;
+
 }

@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DisciplineEntity {
-    private String shortName;
     private int code;
+    private String shortName;
+
 }

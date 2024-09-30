@@ -70,8 +70,6 @@ public class ReviewingCardsView extends Div {
         selectors.add(selectGroup, selectStudent);
         selectors.setWidth("100%");
 
-        // Additional Controls Layout
-        HorizontalLayout additionalControlsLayout = new HorizontalLayout();
         typeOfInformationSelect.setLabel("Тип відомості");
         typeOfInformationSelect.setItems(
                 "Зарахований",
@@ -83,28 +81,30 @@ public class ReviewingCardsView extends Div {
         );
 
         typeOfInformationSelect.getStyle().set("padding", "0");
-        typeOfInformationSelect.setWidth("18%");
+        typeOfInformationSelect.setWidth("100%");
 
         datePicker.getStyle().set("padding", "0");
-        datePicker.setWidth("18%");
+        datePicker.setWidth("100%");
         datePicker.setI18n(setLocal());
 
         numberField.getStyle().set("padding", "0");
-        numberField.setWidth("18%");
+        numberField.setWidth("100%");
 
         studentOrGroupSelect.setLabel("Тип");
         studentOrGroupSelect.setItems("Один студент", "Вся група");
-        studentOrGroupSelect.setWidth("18%");
+        studentOrGroupSelect.setWidth("100%");
         studentOrGroupSelect.getStyle().set("padding", "0");
 
-        submitDataButton.setWidth("18%");
+        submitDataButton.setWidth("100%");
         submitDataButton.getStyle().set("padding", "0");
 
 
+// Create the additional controls layout
+        HorizontalLayout additionalControlsLayout = new HorizontalLayout();
         additionalControlsLayout.add(typeOfInformationSelect, datePicker, numberField, studentOrGroupSelect, submitDataButton);
         additionalControlsLayout.setAlignSelf(FlexComponent.Alignment.END, submitDataButton);
-        additionalControlsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER); // Центрирование по ширине
-        additionalControlsLayout.setWidth("calc(100% - 40px)");
+        additionalControlsLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+        additionalControlsLayout.setWidth("100%");
         additionalControlsLayout.getStyle().set("padding", "0");
 
         // Button Layout
@@ -137,6 +137,44 @@ public class ReviewingCardsView extends Div {
                 "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
                         "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
         );
+
+        // Create a main layout for the left and right sections
+        HorizontalLayout orderLayout = new HorizontalLayout();
+        orderLayout.setWidth("100%");
+
+
+// Additional Controls Layout on the right side
+        VerticalLayout rightColumn = new VerticalLayout();
+        rightColumn.add(typeOfInformationSelect, datePicker, numberField, studentOrGroupSelect, submitDataButton);
+        rightColumn.setAlignItems(FlexComponent.Alignment.END); // Align items to the end of the column
+        rightColumn.setWidth("30%"); // Adjust width as needed
+
+
+
+// Add the columns to the main layout
+        orderLayout.add(orderGrid, rightColumn);
+        orderLayout.setSpacing(false); // Adjust spacing between columns
+        orderLayout.getStyle().set("padding", "0");
+
+        // Add border and title to leftLayout1Page
+        Div orderWrapper = new Div();
+        orderWrapper.getStyle().set("border", "1px solid #ddd");
+        orderWrapper.getStyle().set("border-radius", "8px");
+        orderWrapper.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        orderWrapper.getStyle().set("padding", "20px");
+        orderWrapper.getStyle().set("position", "relative");
+        orderWrapper.getStyle().set("background", "white");
+
+        Span orderTitle = new Span("Накази");
+        orderTitle.getStyle().set("position", "absolute");
+        orderTitle.getStyle().set("top", "-10px");
+        orderTitle.getStyle().set("left", "20px");
+        orderTitle.getStyle().set("background", "white");
+        orderTitle.getStyle().set("padding", "0 10px");
+        orderTitle.getStyle().set("font-weight", "bold");
+
+        orderWrapper.add(orderTitle, orderLayout);
+        orderWrapper.getStyle().set("width", "97%");
 
 
         // Setup tabs
@@ -619,7 +657,7 @@ public class ReviewingCardsView extends Div {
         tabs.addSelectedChangeListener(event -> {
             mainLayout.removeAll();
             if (tabs.getSelectedTab().equals(mainInfoTab)) {
-                mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderGrid);
+                mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderWrapper);
             } else if (tabs.getSelectedTab().equals(additionalInfoTab)) {
                 mainLayout.add(buttonLayout, tabs, additionalInfoLayout);
             } else if (tabs.getSelectedTab().equals(passportInfoTab)) {
@@ -629,7 +667,7 @@ public class ReviewingCardsView extends Div {
             }
         });
 
-        mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderGrid);
+        mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderWrapper);
         mainLayout.setWidth("100%");
         mainLayout.setHeight("100%");
         mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);

@@ -95,6 +95,10 @@ public class SuccessView extends Div {
         marks.getStyle().set("padding", "20px");
         marks.getStyle().set("position", "relative");
         marks.getStyle().set("background", "white");
+        marks.getElement().executeJs(
+                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+        );
 
         leftLayout.add(selectGroup, listStudents);
         synchronizationLayout.add(selectFirstStudent, selectSecondStudent, buttonSynchronization, buttonEditHours, buttonEditDiscipline);

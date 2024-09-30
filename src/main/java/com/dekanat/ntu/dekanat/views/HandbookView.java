@@ -14,6 +14,9 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @PageTitle("Довідник | Деканат")
 @Route(value = "handbook", layout = MainView.class)
 @Component
@@ -43,6 +46,13 @@ public class HandbookView extends Div {
         disciplineGrid.addColumn(DisciplineEntity::getCode).setHeader("Код").setWidth("100px").setFlexGrow(0);
         disciplineGrid.addColumn(DisciplineEntity::getShortName).setHeader("Скорочена назва").setAutoWidth(true);
 
+        // Add test data for disciplines
+        List<DisciplineEntity> disciplineTestData = new ArrayList<>();
+        disciplineTestData.add(new DisciplineEntity(101, "Основи програмування"));
+        disciplineTestData.add(new DisciplineEntity(201, "Вища математика"));
+        disciplineTestData.add(new DisciplineEntity(301, "Теоретична фізика"));
+        disciplineGrid.setItems(disciplineTestData);
+
         disciplineGrid.getStyle().set("border", "1px solid #ddd");
         disciplineGrid.getStyle().set("border-radius", "8px");
         disciplineGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
@@ -59,6 +69,12 @@ public class HandbookView extends Div {
         departmentGrid.addColumn(DepartmentEntity::getName).setHeader("Назва").setAutoWidth(true);
         departmentGrid.addColumn(DepartmentEntity::getPhone).setHeader("Телефон").setAutoWidth(true);
 
+        List<DepartmentEntity> departmentTestData = new ArrayList<>();
+        departmentTestData.add(new DepartmentEntity(1, "Кафедра комп'ютерних наук", "123-456-789"));
+        departmentTestData.add(new DepartmentEntity(2, "Кафедра математики", "987-654-321"));
+        departmentTestData.add(new DepartmentEntity(3, "Кафедра фізики", "555-666-777"));
+        departmentGrid.setItems(departmentTestData);
+
         departmentGrid.getStyle().set("border", "1px solid #ddd");
         departmentGrid.getStyle().set("border-radius", "8px");
         departmentGrid.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
@@ -74,6 +90,13 @@ public class HandbookView extends Div {
         specialtyGrid.addColumn(SpecialtyEntity::getCode).setHeader("Код").setWidth("100px").setFlexGrow(0);
         specialtyGrid.addColumn(SpecialtyEntity::getName).setHeader("Назва").setAutoWidth(true);
         specialtyGrid.addColumn(SpecialtyEntity::getShortName).setHeader("Скорочена назва").setAutoWidth(true);
+
+        // Add test data for specialties
+        List<SpecialtyEntity> specialtyTestData = new ArrayList<>();
+        specialtyTestData.add(new SpecialtyEntity(122, "Комп'ютерні науки", "КН"));
+        specialtyTestData.add(new SpecialtyEntity(113, "Прикладна математика", "ПМ"));
+        specialtyTestData.add(new SpecialtyEntity(104, "Фізика", "Ф"));
+        specialtyGrid.setItems(specialtyTestData);
 
         specialtyGrid.getStyle().set("border", "1px solid #ddd");
         specialtyGrid.getStyle().set("border-radius", "8px");
