@@ -137,6 +137,20 @@ public class ReviewingCardsView extends Div {
                 "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
                         "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
         );
+        Div orderGridWrapper = new Div();
+        orderGridWrapper.getStyle().set("position", "relative");
+
+        Span orderLeftTitle = new Span("Накази");
+        orderLeftTitle.getStyle().set("position", "absolute");
+        orderLeftTitle.getStyle().set("top", "-10px");
+        orderLeftTitle.getStyle().set("left", "20px");
+        orderLeftTitle.getStyle().set("background", "white");
+        orderLeftTitle.getStyle().set("padding", "0 10px");
+        orderLeftTitle.getStyle().set("font-weight", "bold");
+        orderLeftTitle.getStyle().set("z-index", "100000");
+
+        orderGridWrapper.add(orderLeftTitle, orderGrid);
+        orderGridWrapper.getStyle().set("width", "100%");
 
         // Create a main layout for the left and right sections
         HorizontalLayout orderLayout = new HorizontalLayout();
@@ -147,25 +161,19 @@ public class ReviewingCardsView extends Div {
         VerticalLayout rightColumn = new VerticalLayout();
         rightColumn.add(typeOfInformationSelect, datePicker, numberField, studentOrGroupSelect, submitDataButton);
         rightColumn.setAlignItems(FlexComponent.Alignment.END); // Align items to the end of the column
-        rightColumn.setWidth("30%"); // Adjust width as needed
+        rightColumn.setWidth("100%"); // Adjust width as needed
+        rightColumn.getStyle().set("padding", "0px");
 
+        Div InningLayoutWrapper = new Div();
+        InningLayoutWrapper.getStyle().set("border", "1px solid #ddd");
+        InningLayoutWrapper.getStyle().set("border-radius", "8px");
+        InningLayoutWrapper.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        InningLayoutWrapper.getStyle().set("padding", "20px");
+        InningLayoutWrapper.getStyle().set("position", "relative");
+        InningLayoutWrapper.getStyle().set("background", "white");
+        InningLayoutWrapper.getStyle().set("width", "30%");
 
-
-// Add the columns to the main layout
-        orderLayout.add(orderGrid, rightColumn);
-        orderLayout.setSpacing(false); // Adjust spacing between columns
-        orderLayout.getStyle().set("padding", "0");
-
-        // Add border and title to leftLayout1Page
-        Div orderWrapper = new Div();
-        orderWrapper.getStyle().set("border", "1px solid #ddd");
-        orderWrapper.getStyle().set("border-radius", "8px");
-        orderWrapper.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
-        orderWrapper.getStyle().set("padding", "20px");
-        orderWrapper.getStyle().set("position", "relative");
-        orderWrapper.getStyle().set("background", "white");
-
-        Span orderTitle = new Span("Накази");
+        Span orderTitle = new Span("Внесення по типу");
         orderTitle.getStyle().set("position", "absolute");
         orderTitle.getStyle().set("top", "-10px");
         orderTitle.getStyle().set("left", "20px");
@@ -173,8 +181,15 @@ public class ReviewingCardsView extends Div {
         orderTitle.getStyle().set("padding", "0 10px");
         orderTitle.getStyle().set("font-weight", "bold");
 
-        orderWrapper.add(orderTitle, orderLayout);
-        orderWrapper.getStyle().set("width", "97%");
+        InningLayoutWrapper.add(orderTitle, rightColumn);
+
+
+
+// Add the columns to the main layout
+        orderLayout.add(orderGridWrapper,InningLayoutWrapper);
+        orderLayout.setSpacing(false); // Adjust spacing between columns
+        orderLayout.getStyle().set("padding", "0px");
+        orderLayout.getStyle().set("gap", "10px");
 
 
         // Setup tabs
@@ -657,7 +672,7 @@ public class ReviewingCardsView extends Div {
         tabs.addSelectedChangeListener(event -> {
             mainLayout.removeAll();
             if (tabs.getSelectedTab().equals(mainInfoTab)) {
-                mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderWrapper);
+                mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderLayout);
             } else if (tabs.getSelectedTab().equals(additionalInfoTab)) {
                 mainLayout.add(buttonLayout, tabs, additionalInfoLayout);
             } else if (tabs.getSelectedTab().equals(passportInfoTab)) {
@@ -667,7 +682,7 @@ public class ReviewingCardsView extends Div {
             }
         });
 
-        mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderWrapper);
+        mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderLayout);
         mainLayout.setWidth("100%");
         mainLayout.setHeight("100%");
         mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);

@@ -5,6 +5,7 @@ import com.dekanat.ntu.dekanat.views.MainView;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -18,6 +19,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 @PageTitle("Боржники | Деканат")
 @Route(value = "debtor", layout = MainView.class)
@@ -44,6 +46,7 @@ public class DebtorView extends Div {
 
         orderField.setLabel("Наказ");
 
+        dateField.setI18n(setLocal());
         dateField.setLabel("Дата");
 
         // Центрирование кнопки
@@ -51,6 +54,12 @@ public class DebtorView extends Div {
         selectors.add(selectGroup, orderField, dateField, transferButton);
         selectors.setWidth("100%");
         selectors.setSpacing(true);
+        selectors.getStyle().set("border", "1px solid #ddd");
+        selectors.getStyle().set("border-radius", "8px");
+        selectors.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        selectors.getStyle().set("padding", "5px");
+        selectors.getStyle().set("position", "relative");
+        selectors.getStyle().set("background", "white");
 
 
         studentGrid.addColumn(DebtorEntity::getLastName).setHeader("Студент").setAutoWidth(true);
@@ -98,15 +107,40 @@ public class DebtorView extends Div {
         // Добавляем таблицу дисциплин в правую колонку
         disciplineColumn.add(disciplineGrid);
         disciplineColumn.getStyle().set("padding", "0px");
-        disciplineColumn.setWidth("60%"); // Ширина колонки с таблицей дисциплин
+        disciplineColumn.setWidth("63%"); // Ширина колонки с таблицей дисциплин
 
         // Добавляем элементы на основную страницу
         HorizontalLayout contentLayout = new HorizontalLayout(studentColumn, disciplineColumn);
+        contentLayout.getStyle().set("border", "1px solid #ddd");
+        contentLayout.getStyle().set("border-radius", "8px");
+        contentLayout.getStyle().set("box-shadow", "0 2px 4px rgba(0, 0, 0, 0.1)");
+        contentLayout.getStyle().set("padding", "10px");
+        contentLayout.getStyle().set("position", "relative");
+        contentLayout.getStyle().set("background", "white");
+        contentLayout.setWidthFull(); // Занять всю ширину
+        contentLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         contentLayout.setWidth("100%");
         contentLayout.setHeight("600px"); // Установите необходимую высоту
 
         mainLayout.add(selectors, contentLayout);
         mainLayout.setSizeFull();
+        mainLayout.setSizeFull();
+        mainLayout.getStyle().set("gap", "0px");
         add(mainLayout);
+    }
+
+    private DatePicker.DatePickerI18n setLocal() {
+        DatePicker.DatePickerI18n ukrainian = new DatePicker.DatePickerI18n();
+        ukrainian.setMonthNames(List.of("Січень", "Лютий", "Березень", "Квітень",
+                "Травень", "Червень", "Липень", "Серпень", "Вересень", "Жовтень",
+                "Листопад", "Грудень"));
+        ukrainian.setWeekdays(List.of("Неділя", "Понеділок", "Вівторок",
+                "Середа", "Четвер", "П'ятниця", "Субота"));
+        ukrainian.setWeekdaysShort(
+                List.of("Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"));
+        ukrainian.setToday("Сьогодні");
+        ukrainian.setCancel("Скасувати");
+
+        return ukrainian;
     }
 }
