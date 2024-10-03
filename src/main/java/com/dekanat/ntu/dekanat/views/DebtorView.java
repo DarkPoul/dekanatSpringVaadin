@@ -43,6 +43,7 @@ public class DebtorView extends Div {
         selectGroup.setLabel("Група");
         selectGroup.setItems("МП", "Інші групи");
         selectGroup.getStyle().set("width", "37%");
+        selectGroup.getStyle().set("padding-left", "10px");
 
         orderField.setLabel("Наказ");
 
@@ -72,10 +73,12 @@ public class DebtorView extends Div {
         studentGrid.getStyle().set("position", "relative");
         studentGrid.getStyle().set("width", "100%");
 
-        studentGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        studentGrid.addAttachListener(event -> {
+            studentGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
         // Добавление данных в таблицу студентов
         studentGrid.setItems(
@@ -99,15 +102,17 @@ public class DebtorView extends Div {
         disciplineGrid.getStyle().set("position", "relative");
         disciplineGrid.getStyle().set("width", "100%");
 
-        disciplineGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        disciplineGrid.addAttachListener(event -> {
+            disciplineGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
         // Добавляем таблицу дисциплин в правую колонку
         disciplineColumn.add(disciplineGrid);
         disciplineColumn.getStyle().set("padding", "0px");
-        disciplineColumn.setWidth("63%"); // Ширина колонки с таблицей дисциплин
+        disciplineColumn.setWidth("62%"); // Ширина колонки с таблицей дисциплин
 
         // Добавляем элементы на основную страницу
         HorizontalLayout contentLayout = new HorizontalLayout(studentColumn, disciplineColumn);
@@ -117,6 +122,7 @@ public class DebtorView extends Div {
         contentLayout.getStyle().set("padding", "10px");
         contentLayout.getStyle().set("position", "relative");
         contentLayout.getStyle().set("background", "white");
+        contentLayout.getStyle().set("border-top-width", "0px");
         contentLayout.setWidthFull(); // Занять всю ширину
         contentLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         contentLayout.setWidth("100%");

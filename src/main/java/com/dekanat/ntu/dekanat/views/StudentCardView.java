@@ -74,12 +74,12 @@ public class StudentCardView extends Div {
         studentGrid.getStyle().set("padding", "20px");
         studentGrid.getStyle().set("background", "white");
         studentGrid.getStyle().set("width", "97%");
-
-        // Adjust margin in the table using JS
-        studentGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px';"
-        );
+        studentGrid.addAttachListener(event -> {
+            studentGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
 
 // Add select and buttons to a single layout (topLayout)

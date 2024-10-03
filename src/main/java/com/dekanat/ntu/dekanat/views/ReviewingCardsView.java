@@ -133,10 +133,13 @@ public class ReviewingCardsView extends Div {
         orderGrid.getStyle().set("position", "relative");
         orderGrid.getStyle().set("background", "white");
         orderGrid.getStyle().set("min-height", "230px");
-        orderGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        orderGrid.addAttachListener(event -> {
+            orderGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
+
         Div orderGridWrapper = new Div();
         orderGridWrapper.getStyle().set("position", "relative");
 
@@ -672,7 +675,7 @@ public class ReviewingCardsView extends Div {
         tabs.addSelectedChangeListener(event -> {
             mainLayout.removeAll();
             if (tabs.getSelectedTab().equals(mainInfoTab)) {
-                mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderLayout);
+                mainLayout.add(buttonLayout, tabs, mainInfoLayout, orderLayout);
             } else if (tabs.getSelectedTab().equals(additionalInfoTab)) {
                 mainLayout.add(buttonLayout, tabs, additionalInfoLayout);
             } else if (tabs.getSelectedTab().equals(passportInfoTab)) {
@@ -682,7 +685,7 @@ public class ReviewingCardsView extends Div {
             }
         });
 
-        mainLayout.add(buttonLayout, tabs, mainInfoLayout, additionalControlsLayout, orderLayout);
+        mainLayout.add(buttonLayout, tabs, mainInfoLayout, orderLayout);
         mainLayout.setWidth("100%");
         mainLayout.setHeight("100%");
         mainLayout.setAlignItems(FlexComponent.Alignment.CENTER);

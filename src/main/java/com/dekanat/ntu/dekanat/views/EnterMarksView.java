@@ -139,11 +139,12 @@ public class EnterMarksView extends Div {
         studentGrid.getStyle().set("height", "calc(100vh - 200px)");
         studentGrid.getStyle().set("background-color", "white"); // Установите фон
         studentGrid.getStyle().set("padding", "16px"); // Установите паддинг
-
-        studentGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                          "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        studentGrid.addAttachListener(event -> {
+            studentGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
         // Align the button layout at the top
         buttonLayout.setWidthFull();

@@ -60,10 +60,12 @@ public class HandbookView extends Div {
         disciplineGrid.getStyle().set("position", "relative");
         disciplineGrid.getStyle().set("background", "white");
         disciplineGrid.getStyle().set("min-height", "230px");
-        disciplineGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        disciplineGrid.addAttachListener(event -> {
+            disciplineGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
         departmentGrid.addColumn(DepartmentEntity::getId).setHeader("ID").setWidth("100px").setFlexGrow(0);
         departmentGrid.addColumn(DepartmentEntity::getName).setHeader("Назва").setAutoWidth(true);
@@ -82,10 +84,12 @@ public class HandbookView extends Div {
         departmentGrid.getStyle().set("position", "relative");
         departmentGrid.getStyle().set("background", "white");
         departmentGrid.getStyle().set("min-height", "230px");
-        departmentGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        departmentGrid.addAttachListener(event -> {
+            departmentGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
         specialtyGrid.addColumn(SpecialtyEntity::getCode).setHeader("Код").setWidth("100px").setFlexGrow(0);
         specialtyGrid.addColumn(SpecialtyEntity::getName).setHeader("Назва").setAutoWidth(true);
@@ -105,10 +109,12 @@ public class HandbookView extends Div {
         specialtyGrid.getStyle().set("position", "relative");
         specialtyGrid.getStyle().set("background", "white");
         specialtyGrid.getStyle().set("min-height", "230px");
-        specialtyGrid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        specialtyGrid.addAttachListener(event -> {
+            specialtyGrid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
 
         // Add grids to the content containers
         disciplinesContent.add(disciplineGrid);
@@ -133,22 +139,10 @@ public class HandbookView extends Div {
             mainLayout.removeAll();
             if (event.getSelectedTab() == disciplinesTab) {
                 mainLayout.add(tabs, disciplinesContent);
-                disciplineGrid.getElement().executeJs(
-                        "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                                "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-                );
             } else if (event.getSelectedTab() == departmentsTab) {
                 mainLayout.add(tabs, departmentsContent);
-                departmentGrid.getElement().executeJs(
-                        "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                                "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-                );
             } else if (event.getSelectedTab() == specialtiesTab) {
                 mainLayout.add(tabs, specialtiesContent);
-                specialtyGrid.getElement().executeJs(
-                        "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                                "this.shadowRoot.querySelector('#table').style.marginBottom = '5px';"
-                );
             }
         });
     }

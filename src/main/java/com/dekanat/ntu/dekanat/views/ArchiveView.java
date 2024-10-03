@@ -149,10 +149,12 @@ public class ArchiveView extends Div {
         grid.getStyle().set("position", "relative");
         grid.getStyle().set("background", "white");
         grid.getStyle().set("min-height", "530px");
-        grid.getElement().executeJs(
-                "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
-                        "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
-        );
+        grid.addAttachListener(event -> {
+            grid.getElement().executeJs(
+                    "this.shadowRoot.querySelector('#table').style.marginTop = '5px'; " +
+                            "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
+            );
+        });
         grid.getStyle().set("height", "auto");
         // Додавання даних в таблицю з прикладом
         List<ReviewingCardsEntity> sampleData = new ArrayList<>();
