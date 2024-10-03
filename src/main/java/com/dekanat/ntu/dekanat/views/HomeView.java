@@ -27,7 +27,6 @@ public class HomeView extends Div {
         bookLayout.setWidth("100%");
 
 
-
 //        Grid<ChangeLogEntry> changeLogEntryGrid = new Grid<>(ChangeLogEntry.class, false);
 //        changeLogEntryGrid.addColumn("version").setHeader("Версія");
 //        changeLogEntryGrid.addColumn("date").setHeader("Дата");

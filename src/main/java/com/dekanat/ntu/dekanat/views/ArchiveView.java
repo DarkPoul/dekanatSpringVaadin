@@ -155,18 +155,32 @@ public class ArchiveView extends Div {
                             "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
             );
         });
-        grid.getStyle().set("height", "auto");
+        grid.getStyle().set("height", "70vh");
         // Додавання даних в таблицю з прикладом
         List<ReviewingCardsEntity> sampleData = new ArrayList<>();
         sampleData.add(new ReviewingCardsEntity("Іванов", "Іван", "Іванович", "Комп'ютерні науки", 1, "КН-101", 2021, "2000-01-01", "Чоловіча"));
         sampleData.add(new ReviewingCardsEntity("Петренко", "Петро", "Петрович", "Математика", 2, "М-202", 2020, "1999-02-02", "Чоловіча"));
         sampleData.add(new ReviewingCardsEntity("Сидоренко", "Оксана", "Сидорівна", "Фізика", 3, "Ф-303", 2019, "1998-03-03", "Жіноча"));
         sampleData.add(new ReviewingCardsEntity("Коваленко", "Марія", "Ковалівна", "Хімія", 1, "Х-404", 2022, "2001-04-04", "Жіноча"));
-        sampleData.add(new ReviewingCardsEntity("Коваленко", "Марія", "Ковалівна", "Хімія", 1, "Х-404", 2022, "2001-04-04", "Жіноча"));
-        sampleData.add(new ReviewingCardsEntity("Коваленко", "Марія", "Ковалівна", "Хімія", 1, "Х-404", 2022, "2001-04-04", "Жіноча"));
-        sampleData.add(new ReviewingCardsEntity("Коваленко", "Марія", "Ковалівна", "Хімія", 1, "Х-404", 2022, "2001-04-04", "Жіноча"));
-        sampleData.add(new ReviewingCardsEntity("Коваленко", "Марія", "Ковалівна", "Хімія", 1, "Х-404", 2022, "2001-04-04", "Жіноча"));
-        sampleData.add(new ReviewingCardsEntity("Коваленко", "Марія", "Ковалівна", "Хімія", 1, "Х-404", 2022, "2001-04-04", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Бондаренко", "Анатолій", "Володимирович", "Економіка", 2, "Е-505", 2020, "1999-05-05", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Дорошенко", "Світлана", "Анатоліївна", "Біологія", 3, "Б-606", 2021, "2002-06-06", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Кравченко", "Юрій", "Олександрович", "Інформатика", 1, "І-707", 2021, "2000-07-07", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Гончар", "Наталія", "Володимирівна", "Географія", 4, "Г-808", 2019, "1997-08-08", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Шевченко", "Тарас", "Григорович", "Література", 2, "Л-909", 2020, "1998-09-09", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Левченко", "Олена", "Іванівна", "Історія", 3, "Іст-1010", 2021, "1999-10-10", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Зайцева", "Роман", "Сергійович", "Філософія", 1, "Філ-1111", 2022, "2000-11-11", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Мельник", "Анна", "Вікторівна", "Психологія", 5, "Пс-1212", 2019, "1998-12-12", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Семененко", "Костянтин", "Васильович", "Соціологія", 6, "С-1313", 2020, "1997-01-01", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Крючко", "Марина", "Станіславівна", "Правознавство", 7, "П-1414", 2021, "1996-02-02", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Пащенко", "Дмитро", "Анатолійович", "Фінансовий облік", 2, "ФО-1515", 2020, "1995-03-03", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Федоренко", "Ольга", "Олегівна", "Менеджмент", 1, "М-1616", 2019, "1994-04-04", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Демченко", "Віталій", "Петрович", "Маркетинг", 3, "Мк-1717", 2022, "1993-05-05", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Білоус", "Яна", "Сергіївна", "Англійська мова", 4, "А-1818", 2020, "1992-06-06", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Тимошенко", "Олександр", "Володимирович", "Німецька мова", 5, "Н-1919", 2021, "1991-07-07", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Гавриленко", "Ірина", "Іванівна", "Французька мова", 2, "Фр-2020", 2022, "1990-08-08", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Костенко", "Сергій", "Миколайович", "Російська мова", 3, "Р-2121", 2019, "1989-09-09", "Чоловіча"));
+        sampleData.add(new ReviewingCardsEntity("Майстренко", "Алла", "Ігорівна", "Музика", 4, "Муз-2222", 2020, "1988-10-10", "Жіноча"));
+        sampleData.add(new ReviewingCardsEntity("Луговий", "Тетяна", "Станіславівна", "Образотворче мистецтво", 5, "Ом-2323", 2021, "1987-11-11", "Жіноча"));
 
         // Установка данных в таблицю
         dataView = grid.setItems(sampleData);

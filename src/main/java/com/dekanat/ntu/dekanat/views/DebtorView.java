@@ -1,6 +1,8 @@
 package com.dekanat.ntu.dekanat.views;
 
 import com.dekanat.ntu.dekanat.entity.DebtorEntity;
+import com.dekanat.ntu.dekanat.entity.DebtorReasonEntity;
+import com.dekanat.ntu.dekanat.entity.DisciplineEntity;
 import com.dekanat.ntu.dekanat.views.MainView;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
@@ -36,12 +38,12 @@ public class DebtorView extends Div {
     private DatePicker dateField = new DatePicker();
     private Button transferButton = new Button("Переведення");
     private Grid<DebtorEntity> studentGrid = new Grid<>(DebtorEntity.class, false);
-    private Grid<String> disciplineGrid = new Grid<>();
+    private Grid<DebtorReasonEntity> disciplineGrid = new Grid<>(DebtorReasonEntity.class, false);
 
     public DebtorView() {
         // Настройка селекторов
         selectGroup.setLabel("Група");
-        selectGroup.setItems("МП", "Інші групи");
+        selectGroup.setItems("МП", "ІБК","КН","ДЗ","КІ");
         selectGroup.getStyle().set("width", "37%");
         selectGroup.getStyle().set("padding-left", "10px");
 
@@ -84,7 +86,14 @@ public class DebtorView extends Div {
         studentGrid.setItems(
                 new DebtorEntity("Іванов", 1),
                 new DebtorEntity("Петров", 0),
-                new DebtorEntity("Сидоров", 1)
+                new DebtorEntity("Сидоров", 1),
+                new DebtorEntity("Коваленко", 0),
+                new DebtorEntity("Шевченко", 1),
+                new DebtorEntity("Мельник", 0),
+                new DebtorEntity("Кравченко", 1),
+                new DebtorEntity("Бондаренко", 0),
+                new DebtorEntity("Гончар", 1),
+                new DebtorEntity("Дорошенко", 0)
         );
 
         // Добавляем таблицу студентов в левую колонку
@@ -93,8 +102,9 @@ public class DebtorView extends Div {
         studentColumn.setWidth("37%"); // Ширина колонки с таблицей студентов
 
         // Настройка таблицы дисциплин
-        disciplineGrid.addColumn(String::toString).setHeader("Дисципліна").setAutoWidth(true);
-        disciplineGrid.addColumn(String::toString).setHeader("Причини").setAutoWidth(true);
+        disciplineGrid.addColumn(DebtorReasonEntity::getCode).setHeader("Семестр").setWidth("100px").setFlexGrow(0);
+        disciplineGrid.addColumn(DebtorReasonEntity::getName).setHeader("Дисципліна").setAutoWidth(true);
+        disciplineGrid.addColumn(DebtorReasonEntity::getReason).setHeader("Причини").setAutoWidth(true);
 
         disciplineGrid.getStyle().set("border", "1px solid #ddd");
         disciplineGrid.getStyle().set("border-radius", "8px");
@@ -108,6 +118,19 @@ public class DebtorView extends Div {
                             "this.shadowRoot.querySelector('#table').style.marginBottom = '5px'; "
             );
         });
+
+        disciplineGrid.setItems(
+                new DebtorReasonEntity(1, "Математика", "Модуль"),
+                new DebtorReasonEntity(2, "Фізика", "РГР"),
+                new DebtorReasonEntity(3, "Інформатика", "Курсовая"),
+                new DebtorReasonEntity(4, "Хімія", "Модуль"),
+                new DebtorReasonEntity(5, "Біологія", "РГР"),
+                new DebtorReasonEntity(6, "Історія", "Курсовая"),
+                new DebtorReasonEntity(7, "Географія", "Модуль"),
+                new DebtorReasonEntity(1, "Література", "РГР"),
+                new DebtorReasonEntity(2, "Економіка", "Курсовая"),
+                new DebtorReasonEntity(3, "Філософія", "Модуль")
+        );
 
         // Добавляем таблицу дисциплин в правую колонку
         disciplineColumn.add(disciplineGrid);
